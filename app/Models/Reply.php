@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+	protected $guarded = [];
+
     /**
      * Reply has an owner.
      *

@@ -17,6 +17,16 @@ class Thread extends Model
     }
 
     /**
+     * Thread has a creator.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
      * A Thread has many replies.
      *
      * @return Illuminate\Database\Eloquent\Relations\HasMany
@@ -24,5 +34,15 @@ class Thread extends Model
     public function replies()
     {
         return $this->hasMany(Reply::class);
+    }
+
+    /**
+     * Create a reply for the thread.
+     *
+     * @return App\Models\Reply
+     */
+    public function addReply($reply) 
+    {
+        return $this->replies()->create($reply);
     }
 }

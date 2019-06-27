@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -11,6 +12,15 @@ use Tests\TestCase;
 class ThreadTest extends TestCase
 {
 	use RefreshDatabase;
+
+	/** @test */
+	function it_has_a_creator()
+	{
+		$creator = factory(User::class)->create();    
+	    $thread = factory(Thread::class)->create(['user_id' => $creator->id]);
+
+	    $this->assertTrue($thread->creator->is($creator));
+	}
 
 	/** @test */
 	function it_can_have_replies()
@@ -25,5 +35,18 @@ class ThreadTest extends TestCase
 	    $this->assertTrue($replies->contains($replyA));
 	    $this->assertTrue($replies->contains($replyB));
 	    $this->assertFalse($replies->contains($replyC));
+	}
+
+	/** @test */
+	function it_can_add_a_reply()
+	{
+	    $thread = factory(Thread::class)->create();
+
+	    $thread->addReply([
+	    	'body' => 'Code thoughts',
+	    	'user_id' => '1'
+	    ]);
+
+	    $this->assertCount(1, $thread->replies);
 	}
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
+use App\Models\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RepliesController extends Controller
 {
@@ -33,9 +35,14 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Thread $thread)
     {
-        //
+        $reply = $thread->addReply([
+            'user_id' => Auth::user()->id,
+            'body' => request('body'),
+        ]);
+
+        return back();
     }
 
     /**
