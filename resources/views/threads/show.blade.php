@@ -26,8 +26,20 @@
             @empty
                <p>Zzzzzz. Still no replies for this thread.</p>
             @endforelse
-        </div>
 
+            @if(auth()->check())
+                <form method="POST" action="{{ route('replies.store', $thread) }}">
+                    @csrf
+                    <div class="form-group">
+                        <textarea class="form-control" id="body" name="body" rows="5" placeholder="Have something to say?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">Post</button>
+                </form>
+            @else
+                <p class="text-center">Please <a href="/login">sign in</a> or <a href="/register">register</a> in order to participate in this discussion.</p>
+            @endif
+        </div>
     </div>
 </div>
 @endsection
