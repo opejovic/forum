@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     /**
+     * Attributes that are not mass-assignable.
+     */
+    protected $guarded = [];
+
+    /**
      * Returns a string representation of a threads path.
      *
      * @return string

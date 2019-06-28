@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ThreadsController extends Controller
 {
@@ -37,7 +38,12 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $thread = Auth::user()->publishThread([
+            'title' => request('title'),
+            'body' => request('body'),
+        ]);
+
+        return redirect(route('threads.show', $thread->id));
     }
 
     /**

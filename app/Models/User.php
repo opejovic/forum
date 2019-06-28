@@ -36,4 +36,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * User has many threads.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);        
+    }
+
+    /**
+     * User can publish a thread.
+     *
+     * @return App\Models\Thread
+     */
+    public function publishThread($attributes)
+    {
+        return $this->threads()->create($attributes);        
+    }
 }
