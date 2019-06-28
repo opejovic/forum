@@ -19,6 +19,7 @@ class UserTest extends TestCase
 	    $this->assertCount(0, $user->fresh()->threads);
 
 	    $user->publishThread([
+	    	'channel_id' => 1,
 	    	'title' => 'Samurai',
 	    	'body' => 'Samurais are japanse warriors. They follow bushido.',
 	    ]);

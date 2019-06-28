@@ -26,7 +26,7 @@
             @endforeach
 
             @if(auth()->check())
-                <form method="POST" action="{{ route('replies.store', $thread) }}">
+                <form method="POST" action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}">
                     @csrf
                     <div class="form-group">
                         <textarea class="form-control" id="body" name="body" rows="5" placeholder="Have something to say?"></textarea>

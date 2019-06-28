@@ -39,20 +39,22 @@ class ThreadsController extends Controller
     public function store(Request $request)
     {
         $thread = Auth::user()->publishThread([
+            'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body'),
         ]);
 
-        return redirect(route('threads.show', $thread->id));
+        return redirect(route('threads.show',[$thread->channel->slug, $thread->id]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Thread  $thread
+     * @param  $channelId
+     * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channelId, Thread $thread)
     {
         return view('threads.show', ['thread' => $thread]);
     }
@@ -60,7 +62,7 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Thread  $thread
+     * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
     public function edit(Thread $thread)
@@ -72,7 +74,7 @@ class ThreadsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
+     * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)
@@ -83,7 +85,7 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Thread  $thread
+     * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
     public function destroy(Thread $thread)

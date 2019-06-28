@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reply;
-use App\Models\Thread;
+use App\Models\Channel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class RepliesController extends Controller
+class ChannelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,23 +33,18 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread)
+    public function store(Request $request)
     {
-        $reply = $thread->addReply([
-            'user_id' => Auth::user()->id,
-            'body' => request('body'),
-        ]);
-
-        return back();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Reply  $reply
+     * @param  \App\Models\Channel  $channel
      * @return \Illuminate\Http\Response
      */
-    public function show(Reply $reply)
+    public function show(Channel $channel)
     {
         //
     }
@@ -59,10 +52,10 @@ class RepliesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Reply  $reply
+     * @param  \App\Models\Channel  $channel
      * @return \Illuminate\Http\Response
      */
-    public function edit(Reply $reply)
+    public function edit(Channel $channel)
     {
         //
     }
@@ -71,10 +64,10 @@ class RepliesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reply  $reply
+     * @param  \App\Models\Channel  $channel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reply $reply)
+    public function update(Request $request, Channel $channel)
     {
         //
     }
@@ -82,10 +75,10 @@ class RepliesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Reply  $reply
+     * @param  \App\Models\Channel  $channel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reply $reply)
+    public function destroy(Channel $channel)
     {
         //
     }
