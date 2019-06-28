@@ -16,6 +16,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/threads', 'ThreadsController@index')->name('threads.index');
 Route::get('/threads/create', 'ThreadsController@create')->name('threads.create')->middleware('auth');
+Route::get('/threads/{channel}', 'ThreadsController@index')->name('channel.threads');
 Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware('auth');
 Route::get('/threads/{channelId}/{thread}', 'ThreadsController@show')->name('threads.show');
 

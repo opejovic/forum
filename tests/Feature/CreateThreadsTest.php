@@ -76,7 +76,6 @@ class CreateThreadsTest extends TestCase
     private function publishThread($overrides = null)
     {
         $user = factory(User::class)->create();
-        $this->assertCount(0, $user->fresh()->threads);
 
         $response = $this->actingAs($user)->json('POST', "/threads", $this->validParams($overrides));
 
