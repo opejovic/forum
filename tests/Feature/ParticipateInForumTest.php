@@ -22,7 +22,6 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function an_authenticated_user_can_reply_in_forum_threads()
     {
-        $this->withoutExceptionHandling();
         $thread = factory(Thread::class)->create();
         $user = factory(User::class)->create();
         $this->assertCount(0, $thread->fresh()->replies);
@@ -36,6 +35,31 @@ class ParticipateInForumTest extends TestCase
         $response = $this->get($thread->path());
         $response->assertSee('More Cowbell, please');
         $this->assertCount(1, $thread->fresh()->replies);
+    }
 
+    /** @test */
+    function a_reply_requires_a_body()
+    {
+        $thread = factory(Thread::class)->create();
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
+            ->from($thread->path())
+            ->json('POST',"/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+                'body' => null,
+            ])->assertJsonValidationErrors('body');
+    }
+
+    /** @test */
+    function a_replies_body_should_be_atleast_2_characters_long()
+    {
+        $thread = factory(Thread::class)->create();
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
+            ->from($thread->path())
+            ->json('POST',"/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+                'body' => 'A',
+            ])->assertJsonValidationErrors('body');
     }
 }
