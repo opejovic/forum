@@ -15,7 +15,8 @@ class CreateThreadsTest extends TestCase
     /** @test */
     function guests_cannot_publish_threads()
     {
-        $this->json('POST', "/threads", [])->assertStatus(401); // unauthorized            
+        $this->get('threads/create')->assertRedirect('login'); 
+        $this->json('POST', "/threads", [])->assertStatus(401); // unauthorized
     }
 
     /** @test */

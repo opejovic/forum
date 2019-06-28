@@ -20,12 +20,10 @@
                 </div>
             </div>
             <br>    
-            @forelse($thread->replies as $reply)
+            @foreach($thread->replies as $reply)
                 @include('threads.reply')
-            <br>
-            @empty
-               <p>Zzzzzz. Still no replies for this thread.</p>
-            @endforelse
+                <br>
+            @endforeach
 
             @if(auth()->check())
                 <form method="POST" action="{{ route('replies.store', $thread) }}">
