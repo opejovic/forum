@@ -43,4 +43,14 @@ class Reply extends Model
             $this->favorites()->create($attributes);
         }
     }
+
+    /**
+     * Has reply been favorited?
+     *
+     * @return bool
+     */
+    public function favorited()
+    {
+        return $this->favorites()->where(['user_id' => Auth::user()->id])->exists();
+    }
 }

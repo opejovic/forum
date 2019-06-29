@@ -20,4 +20,14 @@ class ReplyTest extends TestCase
 
 	    $this->assertTrue($reply->owner->is($owner));
 	}
+
+	/** @test */
+	function it_can_tell_if_its_been_favorited_by_auth_user()
+	{
+		auth()->login($user = factory(User::class)->create());
+	    $reply = factory(Reply::class)->create();
+	    $reply->favorite();
+
+	    $this->assertTrue($reply->favorited());
+	}
 }
