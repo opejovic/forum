@@ -24,6 +24,12 @@
                             </div>
                         </li>
                     </li>
+
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('threads.create') }}">{{ __('Create new thread') }}</a>
+                        </li>
+                    @endauth
                 </ul>
 
                 <!-- Right Side Of Navbar -->
