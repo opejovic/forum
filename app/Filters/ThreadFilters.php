@@ -6,7 +6,7 @@ use App\Models\User;
 
 class ThreadFilters extends Filters
 {
-	protected $filters = ['by', 'my'];
+	protected $filters = ['by', 'my', 'popular'];
 
     /**
      * summary
@@ -29,5 +29,18 @@ class ThreadFilters extends Filters
     public function my()
     {
         return $this->builder->where('user_id', auth()->id());
+    }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function popular()
+    {
+        if ($this->request->popular == 1) {
+            return $this->builder->orderBy('replies_count', 'desc');
+        };
     }
 }

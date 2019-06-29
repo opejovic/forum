@@ -16,6 +16,7 @@
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Browse</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
+                                <a class="dropdown-item" href="/threads?popular=1">{{ __('Popular Threads') }}</a>
 
                                 @auth
                                     <a class="dropdown-item" href="/threads?my">{{ __('My Threads') }}</a>
