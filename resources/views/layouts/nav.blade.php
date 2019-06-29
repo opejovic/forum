@@ -18,7 +18,7 @@
                                 <a class="dropdown-item" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
 
                                 @auth
-                                    <a class="dropdown-item" href="/threads?by={{ auth()->user()->name }}">{{ __('My Threads') }}</a>
+                                    <a class="dropdown-item" href="/threads?my">{{ __('My Threads') }}</a>
                                 @endauth
                             </div>
                         </li>
