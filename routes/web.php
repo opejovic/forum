@@ -21,3 +21,5 @@ Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middl
 Route::get('/threads/{channelId}/{thread}', 'ThreadsController@show')->name('threads.show');
 
 Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware('auth');
+
+Route::post('/replies/{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite')->middleware('auth');
