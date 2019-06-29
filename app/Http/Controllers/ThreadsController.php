@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Channel;
 use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,10 +19,12 @@ class ThreadsController extends Controller
     {  
         if ($channel->exists) {
             $threads = $channel->threads()->latest()->get();
+        } elseif ($userName = request('by')) {
+            $user = User::whereName($userName)->firstOrFail();
+            $threads = Thread::where('user_id', $user->id)->latest()->get();
         } else {
             $threads = Thread::latest()->get();
         }
-
 
         return view('threads.index', ['threads' => $threads]);
     }
