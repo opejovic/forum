@@ -6,10 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+
     /**
      * Attributes that are not mass-assignable.
      */
     protected $guarded = [];
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('replyCount', function ($builder) {
+            $builder->withCount('replies');
+        });
+    }
 
     /**
      * Returns a string representation of a threads path.
