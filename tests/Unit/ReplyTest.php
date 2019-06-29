@@ -28,6 +28,6 @@ class ReplyTest extends TestCase
 	    $reply = factory(Reply::class)->create();
 	    $reply->favorite();
 
-	    $this->assertTrue($reply->favorited());
+	    $this->assertTrue($reply->isFavorited());
 	}
 }

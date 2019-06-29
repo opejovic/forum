@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class Reply extends Model
 {
 	protected $guarded = [];
-
+    protected $with = ['favorites'];
     /**
      * Reply has an owner.
      *
@@ -49,8 +49,8 @@ class Reply extends Model
      *
      * @return bool
      */
-    public function favorited()
+    public function isFavorited()
     {
-        return $this->favorites()->where(['user_id' => Auth::user()->id])->exists();
+        return !! $this->favorites->where('user_id', Auth::user()->id)->count();
     }
 }
