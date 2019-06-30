@@ -2,7 +2,7 @@
 	@slot('heading')
 		<div>
 			You replied to a thread
-			<a href="{{ $activity->subject->thread->path() }}#{{ $activity->subject->id}}">
+			<a href="{{ $activity->subject->thread->path() }}#reply-{{ $activity->subject->id}}">
 				{{ $activity->subject->thread->title }}
 			</a>
 			
