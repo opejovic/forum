@@ -53,7 +53,8 @@ class ThreadsController extends Controller
             'body' => request('body'),
         ]);
 
-        return redirect(route('threads.show',[$thread->channel->slug, $thread->id]));
+        return redirect(route('threads.show',[$thread->channel->slug, $thread->id]))
+            ->with('flash', 'Thread successfully published.');
     }
 
     /**
@@ -110,7 +111,7 @@ class ThreadsController extends Controller
             return response([], 200);
         }
 
-        return redirect(route('threads.index'));
+        return redirect(route('threads.index'))->with('flash', 'Thread deleted.');
     }
 
     /**
