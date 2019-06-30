@@ -8,7 +8,7 @@
                 <div class="card-header d-flex justify-content-between">
                     <div>
                         <h4>{{ $thread->title }}</h4>
-                        <a href="#">{{ $thread->creator->name }}</a>
+                        <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a>
                     </div>
 
                     <div>{{ $thread->created_at->diffForHumans() }}</div>

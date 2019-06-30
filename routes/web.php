@@ -23,3 +23,5 @@ Route::get('/threads/{channelId}/{thread}', 'ThreadsController@show')->name('thr
 Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware('auth');
 
 Route::post('/replies/{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite')->middleware('auth');
+
+Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');

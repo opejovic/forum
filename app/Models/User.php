@@ -38,13 +38,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * Route key name for the model.
+     *
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    /**
      * User has many threads.
      *
      * @return Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function threads()
     {
-        return $this->hasMany(Thread::class);        
+        return $this->hasMany(Thread::class)->latest();        
     }
 
     /**
