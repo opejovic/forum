@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
 
     /**
      * Attributes that are not mass-assignable.
