@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,5 +35,14 @@ class UserTest extends TestCase
 	    $thread = factory(Thread::class)->create(['user_id' => $user->id]);
 
 	    $this->assertTrue($user->threads->contains($thread));
+	}
+
+	/** @test */
+	function it_can_have_many_replies()
+	{
+	    $user = factory(User::class)->create();
+	    $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+
+	    $this->assertTrue($user->replies->contains($reply));
 	}
 }

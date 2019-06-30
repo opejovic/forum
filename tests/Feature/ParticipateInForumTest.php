@@ -62,4 +62,39 @@ class ParticipateInForumTest extends TestCase
                 'body' => 'A',
             ])->assertJsonValidationErrors('body');
     }
+
+    /** @test */
+    function guests_cannot_delete_replies()
+    {
+        $this->json('DELETE', "/replies/1")->assertStatus(401); // unauthorized
+    }
+
+    /** @test */
+    function unauthorized_users_cannot_delete_replies()
+    {
+        $john = factory(User::class)->create();
+        $johnsReply = factory(Reply::class)->create(['user_id' => $john->id]);
+        $this->assertCount(1, $john->replies);
+        $otherUser = factory(User::class)->create();
+
+        $response = $this->actingAs($otherUser)->json('DELETE', "/replies/{$johnsReply->id}");
+
+        $response->assertStatus(403);
+        $this->assertCount(1, $john->fresh()->replies);
+    }
+
+    /** @test */
+    function authorized_users_can_delete_replies()
+    {
+        // Arrange: authorized user, and a reply
+        $user = factory(User::class)->create();
+        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+        $this->assertCount(1, $user->replies);
+        // Act: submit a delete request for the reply
+        $response = $this->actingAs($user)->json('DELETE', "/replies/{$reply->id}");
+
+        // Assert: the reply has been deleted
+        $response->assertStatus(200);
+        $this->assertCount(0, $user->fresh()->replies);
+    }
 }

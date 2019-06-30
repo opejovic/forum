@@ -21,15 +21,15 @@
                     {{ $thread->body }}
                 </div>
 
-                <div class="card-footer text-right">
-                    @can('update', $thread)
+                @can('update', $thread)
+                    <div class="card-footer text-right">
                         <form method="POST" action="{{ route('threads.delete', [$thread->channel, $thread]) }}">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                         </form>
-                    @endcan
-                </div>
+                    </div>
+                @endcan
             </div>
 
             <br>    

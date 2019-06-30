@@ -75,4 +75,14 @@ class User extends Authenticatable
     {
         return $this->threads()->create($attributes);        
     }
+
+    /**
+     * User can have many replies.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);        
+    }
 }
