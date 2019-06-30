@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Favorable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Reply extends Model
 {
+    use Favorable;
+
 	protected $guarded = [];
-    protected $with = ['favorites'];
+    protected $with = ['owner', 'favorites'];
     /**
      * Reply has an owner.
      *
@@ -17,40 +19,5 @@ class Reply extends Model
     public function owner() 
     {
     	return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * summary
-     *
-     * @return void
-     * @author 
-     */
-    public function favorites()
-    {
-        return $this->morphMany(Favorite::class, 'favorited');
-    }
-
-    /**
-     * Favorite a reply.
-     *
-     * @return void
-     * @author 
-     */
-    public function favorite()
-    {
-        $attributes = ['user_id' => Auth::user()->id];
-        if ($this->favorites()->where($attributes)->doesntExist()) {
-            $this->favorites()->create($attributes);
-        }
-    }
-
-    /**
-     * Has reply been favorited?
-     *
-     * @return bool
-     */
-    public function isFavorited()
-    {
-        return !! $this->favorites->where('user_id', Auth::user()->id)->count();
     }
 }

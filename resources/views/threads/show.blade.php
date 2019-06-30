@@ -19,6 +19,7 @@
                     {{ $thread->body }}
                 </div>
             </div>
+
             <br>    
             @foreach($replies as $reply)
                 @include('threads.reply')

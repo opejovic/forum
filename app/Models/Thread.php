@@ -11,7 +11,11 @@ class Thread extends Model
      * Attributes that are not mass-assignable.
      */
     protected $guarded = [];
-
+    
+    /**
+     * Relationships that are included in query.
+     */
+    protected $with = ['channel'];
     /**
      * summary
      *
@@ -22,8 +26,14 @@ class Thread extends Model
     {
         parent::boot();
 
+        // Include replies count in every thread query.
         static::addGlobalScope('replyCount', function ($builder) {
             $builder->withCount('replies');
+        });
+
+        // Include thread creator in every thread query.
+        static::addGlobalScope('creator', function ($builder) {
+            $builder->with('creator');
         });
     }
 
@@ -64,9 +74,7 @@ class Thread extends Model
      */
     public function replies()
     {
-        return $this->hasMany(Reply::class)
-            ->with('owner')
-            ->withCount('favorites');
+        return $this->hasMany(Reply::class);
     }
 
     /**

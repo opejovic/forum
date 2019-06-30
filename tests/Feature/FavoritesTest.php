@@ -29,7 +29,6 @@ class FavoritesTest extends TestCase
         $response = $this->actingAs($user)->json('POST', "/replies/{$reply->id}/favorites");
 
         // Assert: the favorites table has a record
-        $response->assertStatus(200);
         $this->assertCount(1, $reply->favorites);
     }
 
@@ -41,7 +40,6 @@ class FavoritesTest extends TestCase
         $user = factory(User::class)->create(); 
         $reply = factory(Reply::class)->create();
         $response = $this->actingAs($user)->json('POST', "/replies/{$reply->id}/favorites");
-        $response->assertStatus(200);
         $this->assertCount(1, $reply->favorites);
 
         // Act: submit a post to /replies/{reply}/favorites
