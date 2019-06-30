@@ -17,10 +17,14 @@ trait RecordsActivity
         if (auth()->guest()) return;
         
 		static::getActivitiesToRecord()->each(function ($event) {
-		    static::created(function ($model) use ($event) {
+		    static::$event(function ($model) use ($event) {
 	            $model->recordActivity($event);
 	        });
 		});
+
+        static::deleting(function ($model) {
+            $model->activities()->delete();
+        });
 	}
 
 	/**

@@ -64,13 +64,19 @@ class CreateThreadsTest extends TestCase
     function an_authenticated_user_can_delete_their_threads()
     {
         $user = factory(User::class)->create();
-        $thread = factory(Thread::class)->create(['user_id' => $user->id]);
+        auth()->login($user);
+        $thread = factory(Thread::class)->create(['user_id' => auth()->id()]);
+        $reply = factory(Reply::class)->create([
+            'thread_id' => $thread->id,
+            'user_id' => auth()->id()
+        ]);
         $this->assertCount(1, $user->fresh()->threads);
 
         $response = $this->actingAs($user)->json('DELETE', "/threads/{$thread->channel->slug}/{$thread->id}");
 
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->threads);
+        $this->assertCount(0, $user->fresh()->activities);
     }
 
     /** @test */
