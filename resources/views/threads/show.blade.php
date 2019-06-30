@@ -11,12 +11,22 @@
                         <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a>
                     </div>
 
-                    <div>{{ $thread->created_at->diffForHumans() }}</div>
+                    <div>
+                        <div class="mb-1">{{ $thread->created_at->diffForHumans() }}</div> 
+                    </div>
                     
                 </div>
 
                 <div class="card-body">
                     {{ $thread->body }}
+                </div>
+
+                <div class="card-footer text-right">
+                    <form method="POST" action="{{ route('threads.delete', [$thread->channel, $thread]) }}">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
                 </div>
             </div>
 
@@ -46,7 +56,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div>
-
+                        Thread information
                     </div>
                 </div>
 

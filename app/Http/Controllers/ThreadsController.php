@@ -100,9 +100,17 @@ class ThreadsController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy(Channel $channel, Thread $thread)
     {
-        //
+        abort_unless($thread->creator->is(Auth::user()), 403);
+
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 200);
+        }
+
+        return redirect(route('threads.index'));
     }
 
     /**

@@ -6,10 +6,10 @@
         <div class="col-md-8">
             @forelse($threads as $thread)  
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
                             <a href="{{ $thread->path() }}">
-                                {{ $thread->title }}
+                                <strong class="">{{ $thread->title }}</strong>
                             </a>
                         </div>
 
