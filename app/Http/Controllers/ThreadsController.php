@@ -102,7 +102,7 @@ class ThreadsController extends Controller
      */
     public function destroy(Channel $channel, Thread $thread)
     {
-        abort_unless($thread->creator->is(Auth::user()), 403);
+        $this->authorize('update', $thread);
 
         $thread->delete();
 

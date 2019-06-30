@@ -28,7 +28,7 @@
                 </div>
                 <br>
             @empty
-                <p>No threads created yet.</p>
+                <p>There are no relevant results yet.</p>
             @endforelse
         </div>
     </div>

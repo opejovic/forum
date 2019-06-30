@@ -22,11 +22,13 @@
                 </div>
 
                 <div class="card-footer text-right">
-                    <form method="POST" action="{{ route('threads.delete', [$thread->channel, $thread]) }}">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                    </form>
+                    @can('update', $thread)
+                        <form method="POST" action="{{ route('threads.delete', [$thread->channel, $thread]) }}">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
+                    @endcan
                 </div>
             </div>
 
