@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
+use Illuminate\Foundation\Testing\Constraints\SeeInOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -49,5 +50,23 @@ class ActivityTest extends TestCase
 
 	    $activity = Activity::first();
 	    $this->assertEquals($activity->subject->id, $reply->id);
+	}
+
+	/** @test */
+	function it_can_fetch_a_feed_for_any_user()
+	{
+		auth()->login($user = factory(User::class)->create());
+		factory(Thread::class, 2)->create(['user_id' => auth()->id()]);
+	    auth()->user()->activities()->first()->update(['created_at' => now()->subWeek()]);
+
+	    $feed = Activity::feed(auth()->user());
+
+	    $this->assertTrue($feed->keys()->contains(
+	    	now()->format('d-m-Y')
+	   	));
+
+	   	$this->assertTrue($feed->keys()->contains(
+	    	now()->subWeek()->format('d-m-Y')
+	   	));
 	}
 }

@@ -28,10 +28,10 @@ class ProfilesTest extends TestCase
     /** @test */
     function profiles_display_all_threads_associated_by_the_user()
     {
-        $john = factory(User::class)->create([
+        auth()->login($john = factory(User::class)->create([
             'name' => 'JohnDoe',
-        ]);
-        $johnsThread = factory(Thread::class)->create(['user_id' => $john->id]);
+        ]));
+        $johnsThread = factory(Thread::class)->create(['user_id' => auth()->id()]);
 
         $response = $this->get("/profiles/{$john->name}");
 
