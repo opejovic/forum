@@ -57,6 +57,16 @@ class User extends Authenticatable
     }
 
     /**
+     * User has many activities.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    /**
      * User can publish a thread.
      *
      * @return App\Models\Thread

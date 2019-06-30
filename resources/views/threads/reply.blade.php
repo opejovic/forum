@@ -20,6 +20,7 @@
     </div>
 
     <div class="card-body">
+        <a name="{{ $reply->id }}"></a>
         {{ $reply->body }}
     </div>
 </div>

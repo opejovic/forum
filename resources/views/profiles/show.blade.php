@@ -15,22 +15,14 @@
             </div>
             <hr>
 
-            @foreach($threads as $thread)
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
+            @foreach($activities as $date => $activity)
+                <h4 class="text-center">{{ $date }}</h4>
+                @foreach ($activity as $record)
+                    @include("profiles.activities.{$record->type}", ['activity' => $record])
+                    <br>
+                @endforeach
+            @endforeach
 
-                    <span>Published {{ $thread->created_at->diffForHumans() }}.</span>
-                </div>
-
-                <div class="card-body">
-                    {{ $thread->body }}
-                </div>
-            </div>
-            <br>
-        @endforeach
-
-        {{ $threads->links() }}
         </div>
     </div>
 </div>

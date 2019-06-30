@@ -12,6 +12,7 @@ class Reply extends Model
 
 	protected $guarded = [];
     protected $with = ['owner', 'favorites'];
+    
     /**
      * Reply has an owner.
      *
@@ -21,4 +22,15 @@ class Reply extends Model
     {
     	return $this->belongsTo(User::class, 'user_id');
     }
+    
+    /**
+     * Reply belongs to a Thread.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thread() 
+    {
+        return $this->belongsTo(Thread::class);
+    }
+
 }
