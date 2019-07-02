@@ -22,6 +22,7 @@ Route::get('/threads/{channelId}/{thread}', 'ThreadsController@show')->name('thr
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy')->name('threads.delete')->middleware('auth');
 
 Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware('auth');
+Route::patch('/replies/{reply}', 'RepliesController@update')->name('replies.update')->middleware('auth');
 Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.delete')->middleware('auth');
 
 Route::post('/replies/{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite')->middleware('auth');

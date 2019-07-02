@@ -97,4 +97,40 @@ class ParticipateInForumTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->replies);
     }
+
+    /** @test */
+    function unauthorized_users_cannot_update_replies()
+    {
+        $john = factory(User::class)->create();
+        $johnsReply = factory(Reply::class)->create([
+            'user_id' => $john->id,
+            'body' => 'Before Update'
+        ]);
+        $notJohn = factory(User::class)->create();
+
+        $response = $this->actingAs($notJohn)->json('PATCH', "/replies/{$johnsReply->id}", [
+            'body' => 'Updated'
+        ]);
+
+        $response->assertStatus(403);
+        $this->assertEquals('Before Update', $johnsReply->fresh()->body);
+    }
+
+    /** @test */
+    function authorized_users_can_update_replies()
+    {
+        $this->withoutExceptionHandling();
+        $user = factory(User::class)->create();
+        $reply = factory(Reply::class)->create([
+            'user_id' => $user->id,
+            'body' => 'Before Update'
+        ]);
+
+        $response = $this->actingAs($user)->json('PATCH', "/replies/{$reply->id}", [
+            'body' => 'Updated'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals('Updated', $reply->fresh()->body);
+    }
 }

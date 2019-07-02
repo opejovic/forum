@@ -53,7 +53,7 @@ class ReplyPolicy
      */
     public function update(User $user, Reply $reply)
     {
-        return $reply->owner->is($user);
+        return $reply->owner->is($user); 
     }
 
     /**
