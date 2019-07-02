@@ -35,7 +35,6 @@
             <br>    
             @foreach($replies as $reply)
                 @include('threads.reply')
-                <br>
             @endforeach
 
            {{ $replies->links() }}

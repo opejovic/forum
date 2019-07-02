@@ -18,6 +18,16 @@
 					flash(response.data.message);
 				})
 				.catch();
+			},
+
+			deleteReply() {
+				axios.delete(`/replies/${this.attributes.id}`)
+				.then(response => {
+					$(this.$el).fadeOut(400, () => {
+						flash(response.data.message);
+					});
+				})
+				.catch();
 			}
 		},
 	}

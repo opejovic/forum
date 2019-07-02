@@ -1908,6 +1908,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.editing = false;
         flash(response.data.message);
       })["catch"]();
+    },
+    deleteReply: function deleteReply() {
+      var _this2 = this;
+
+      axios["delete"]("/replies/".concat(this.attributes.id)).then(function (response) {
+        $(_this2.$el).fadeOut(400, function () {
+          flash(response.data.message);
+        });
+      })["catch"]();
     }
   }
 });
