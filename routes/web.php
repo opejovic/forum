@@ -26,5 +26,6 @@ Route::patch('/replies/{reply}', 'RepliesController@update')->name('replies.upda
 Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.delete')->middleware('auth');
 
 Route::post('/replies/{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite')->middleware('auth');
+Route::delete('/replies/{reply}/favorites', 'ReplyFavoritesController@destroy')->name('reply.unfavorite')->middleware('auth');
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');

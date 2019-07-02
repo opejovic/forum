@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favorite;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 
@@ -80,8 +81,8 @@ class ReplyFavoritesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Reply $reply)
     {
-        //
+        $reply->unfavorite();
     }
 }
