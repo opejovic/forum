@@ -41,6 +41,10 @@ class Reply extends Model
      */
     public function getCanUpdateAttribute()
     {
-        return auth()->user()->can('update', $this);
+        if (auth()->check()) {
+            return auth()->user()->can('update', $this);
+        }
+
+        return false;
     }
 }

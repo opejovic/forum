@@ -97,4 +97,19 @@ class ReadThreadsTest extends TestCase
             $threadWithOneReply->title,
         ]);
     }
+
+    /** @test */
+    function user_can_request_all_replies_for_a_given_thread()
+    {
+        $thread = factory(Thread::class)->create();
+        $replies = factory(Reply::class, 2)->create(['thread_id' => $thread->id]);
+
+        $response = $this->json('GET', "/threads/{$thread->channel->slug}/{$thread->id}/replies");
+
+        $response->assertStatus(200);
+        $this->assertArraySubset(
+            $replies->toArray(), 
+            $response->json()['data']
+        );
+    }
 }

@@ -33,7 +33,7 @@
                     @endcan
                 </div>
 
-                <replies :data="{{ $replies }}" @removed="repliesCount--" @added="repliesCount++"></replies>
+                <replies @removed="repliesCount--" @added="repliesCount++"></replies>
 
             </div>
 
