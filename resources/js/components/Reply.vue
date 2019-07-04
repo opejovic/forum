@@ -2,7 +2,7 @@
 	<div class="card mb-4">
 		<div :id="'reply-'+id" class="card-header d-flex justify-content-between">
 			<div>
-				<a :href="'/profiles'+reply.owner.name" v-text="reply.owner.name">
+				<a :href="'/profiles/'+reply.owner.name" v-text="reply.owner.name">
 				</a> 
 				said {{ reply.created_at }}
 			</div>

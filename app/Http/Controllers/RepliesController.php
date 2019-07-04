@@ -46,6 +46,10 @@ class RepliesController extends Controller
             'body' => request('body'),
         ]);
 
+        if (request()->wantsJson()) {
+            return response($reply->load('owner'), 200);
+        }
+
         return back()->with('flash', 'Your reply has been posted.');;
     }
 
