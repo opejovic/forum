@@ -6,7 +6,7 @@ use App\Models\User;
 
 class ThreadFilters extends Filters
 {
-	protected $filters = ['by', 'my', 'popular'];
+	protected $filters = ['by', 'my', 'popular', 'unanswered'];
 
     /**
      * summary
@@ -32,15 +32,27 @@ class ThreadFilters extends Filters
     }
 
     /**
-     * summary
+     * Filter threads by popularity.
      *
-     * @return void
+     * @return Illuminate\Database\Eloquent\QueryBuilder
      * @author 
      */
     public function popular()
     {
         if ($this->request->popular == 1) {
             return $this->builder->orderBy('replies_count', 'desc');
+        };
+    }
+    /**
+     * Filter the unanswered threads.
+     *
+     * @return void
+     * @author 
+     */
+    public function unanswered()
+    {
+        if ($this->request->unanswered == 1) {
+            return $this->builder->where('replies_count', 0);
         };
     }
 }

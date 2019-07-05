@@ -41,17 +41,6 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    function user_can_read_all_replies_associated_with_a_thread()
-    {
-        $reply = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
-
-        $response = $this->get("/threads/{$this->thread->channel->slug}/{$this->thread->id}");
-
-        $response->assertViewIs('threads.show');
-        $response->assertSee($reply->body);
-    }
-
-    /** @test */
     function user_can_filter_threads_according_to_a_channel()
     {
         $channel = factory(Channel::class)->create();
@@ -99,6 +88,23 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
+    function user_can_filter_unanswered_threads()
+    {
+        // Arrange: two threads, one with a reply, and other one without a reply
+        $threadWithReply = factory(Thread::class)->create();
+        factory(Reply::class)->create(['thread_id' => $threadWithReply->id]);
+        $unansweredThread = factory(Thread::class)->create();
+        $this->assertEquals(0, $unansweredThread->fresh()->replies_count);
+
+        // Act: apply filter / visit endpoint with querystring
+        $response = $this->get('/threads?unanswered=1');
+
+        // Assert: only the thread without the reply is shown
+        $response->assertSee($unansweredThread->title);
+        $response->assertDontSee($threadWithReply->title);
+    }
+
+    /** @test */
     function user_can_request_all_replies_for_a_given_thread()
     {
         $thread = factory(Thread::class)->create();
@@ -108,7 +114,7 @@ class ReadThreadsTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertArraySubset(
-            $replies->toArray(), 
+            $replies->fresh()->toArray(), 
             $response->json()['data']
         );
     }

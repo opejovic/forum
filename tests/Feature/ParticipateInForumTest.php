@@ -25,16 +25,16 @@ class ParticipateInForumTest extends TestCase
         $thread = factory(Thread::class)->create();
         $user = factory(User::class)->create();
         $this->assertCount(0, $thread->fresh()->replies);
+        $this->assertEquals(0, $thread->fresh()->replies_count);
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->post("/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
                 'body' => 'More Cowbell, please.',
-            ])->assertRedirect($thread->path());
+            ])->assertStatus(200);
 
-        $response = $this->get($thread->path());
-        $response->assertSee('More Cowbell, please');
         $this->assertCount(1, $thread->fresh()->replies);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -86,16 +86,19 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function authorized_users_can_delete_replies()
     {
-        // Arrange: authorized user, and a reply
         $user = factory(User::class)->create();
-        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+        $thread = factory(Thread::class)->create();
+        $reply = factory(Reply::class)->create([
+            'thread_id' => $thread->id,
+            'user_id' => $user->id
+        ]);
         $this->assertCount(1, $user->replies);
-        // Act: submit a delete request for the reply
+
         $response = $this->actingAs($user)->json('DELETE', "/replies/{$reply->id}");
 
-        // Assert: the reply has been deleted
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->replies);
+        $this->assertEquals(0, $thread->fresh()->replies_count);
     }
 
     /** @test */

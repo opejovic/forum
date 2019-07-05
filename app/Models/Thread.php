@@ -28,11 +28,6 @@ class Thread extends Model
     {
         parent::boot();
 
-        // Include replies count in every thread query.
-        static::addGlobalScope('replyCount', function ($builder) {
-            $builder->withCount('replies');
-        });
-
         // Include thread creator in every thread query.
         static::addGlobalScope('creator', function ($builder) {
             $builder->with('creator');

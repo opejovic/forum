@@ -2034,8 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
       page: '',
       prevUrl: '',
       nextUrl: '',
-      pages: '',
-      soul: ''
+      pages: ''
     };
   },
   watch: {
@@ -2141,6 +2140,7 @@ __webpack_require__.r(__webpack_exports__);
       var data = _ref.data;
       this.dataSet = data;
       this.items = data.data;
+      window.location(0, 0);
     }
   }
 });
@@ -38454,12 +38454,7 @@ var render = function() {
                     {
                       staticClass: "page-link",
                       attrs: { href: "#", rel: "prev" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.previousPage($event)
-                        }
-                      }
+                      on: { click: _vm.previousPage }
                     },
                     [_vm._v("Previous")]
                   )
@@ -38491,12 +38486,7 @@ var render = function() {
                     {
                       staticClass: "page-link",
                       attrs: { href: "#", rel: "next" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.nextPage($event)
-                        }
-                      }
+                      on: { click: _vm.nextPage }
                     },
                     [_vm._v("Next")]
                   )

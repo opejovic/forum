@@ -3,13 +3,13 @@
 		<nav aria-label="Page navigation example">
 			<ul class="pagination">
 				<li :class="prevUrl ? 'page-item' : 'page-item disabled'">
-					<a class="page-link" href="#" rel="prev" @click.prevent="previousPage">Previous</a>
+					<a class="page-link" href="#" rel="prev" @click="previousPage">Previous</a>
 				</li>
 				<li v-for="item in pages" class="page-item">
 					<a :class="item == page ? 'page-link selected' : 'page-link'" href="#" v-text="item" @click="select(item)"></a>
 				</li>
 				<li :class="nextUrl ? 'page-item' : 'page-item disabled'">
-					<a class="page-link" href="#" rel="next" @click.prevent="nextPage">Next</a>
+					<a class="page-link" href="#" rel="next" @click="nextPage">Next</a>
 				</li>
 			</ul>
 		</nav>
@@ -25,7 +25,6 @@
 				prevUrl: '',
 				nextUrl: '',
 				pages: '',
-				soul: '',
 			}
 		},
 

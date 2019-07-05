@@ -52,6 +52,8 @@
 			refresh({data}) {
 				this.dataSet = data;
 				this.items = data.data;
+
+				window.location(0, 0);
 			}
 		},
 	}
