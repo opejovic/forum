@@ -65,4 +65,28 @@ class ThreadTest extends TestCase
 
 	    $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
 	}
+
+	/** @test */
+	function thread_can_be_subscribed_to()
+	{
+	    // Arrange: we have a thread
+	    $thread = factory(Thread::class)->create();
+
+	    // Act: we subscribe to a thread
+	    $thread->subscribe($userId = 1);
+
+	    // Assert: thread has 1 subscriber
+	    $this->assertCount(1, $thread->subscriptions);
+	}
+
+	/** @test */
+	function thread_can_be_unsubscribed_from()
+	{
+	    $thread = factory(Thread::class)->create();
+	    $thread->subscribe($userId = 1);
+
+	    $thread->unsubscribe($userId);
+
+	    $this->assertCount(0, $thread->subscriptions);
+	}
 }

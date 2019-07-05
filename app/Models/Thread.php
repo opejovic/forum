@@ -89,13 +89,51 @@ class Thread extends Model
     }
 
     /**
-     * summary
+     * Apply the filters for the thread.
      *
+     * @param Illuminate\Database\Eloquent\QueryBuilder $query
+     * @param ThreadFilters $filters
      * @return void
-     * @author 
      */
     public function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
     }
+    /**
+     * Thread has many subscriptions.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
+    /**
+     * Subscribe a user to the thread.
+     *
+     * @param App\Models\User $userId
+     * @return void
+     */
+    public function subscribe($userId = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);        
+    }
+
+    /**
+     * Unsubscribe the user from the thread.
+     *
+     * @param App\Models\User $userId
+     * @return void
+     */
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ?: auth()->id())
+            ->first()
+            ->delete();
+    }
+
 }
