@@ -1,25 +1,25 @@
 <template>
 	<div>
-		<!-- <form method="POST" action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}"> -->
-		<div class="form-group">
+		<div class="form-group" v-if="signedIn">
 			<textarea 
-				:class="errors.body ? 'form-control is-invalid' : 'form-control'"
-				id="body" 
-				name="body" 
-				rows="5" 
-				placeholder="Have something to say?" 
-				v-model="body"
-				@keydown="clear"></textarea>
+			:class="errors.body ? 'form-control is-invalid' : 'form-control'"
+			id="body" 
+			name="body" 
+			rows="5" 
+			placeholder="Have something to say?" 
+			v-model="body"
+			@keydown="clear"></textarea>
 
-				<span class="invalid-feedback" role="alert" v-if="errors.body">
-                    <strong v-text="errors.body[0]"></strong>
-                </span>
+			<span class="invalid-feedback" role="alert" v-if="errors.body">
+				<strong v-text="errors.body[0]"></strong>
+			</span>
+
+			<button type="submit" class="btn btn-secondary mt-2" @click="addReply">Post</button>
 		</div>
 
-		<button type="submit" class="btn btn-secondary" @click="addReply">Post</button>
-	<!-- @else
-	<p class="text-center">Please <a href="/login">sign in</a> or <a href="/register">register</a> in order to participate in this discussion.</p>
-	@endif -->
+
+		<p v-else class="text-center">Please <a href="/login">sign in</a> or <a href="/register">register</a> in order to participate in this discussion.</p>
+
 	</div>	
 </template>
 
@@ -42,8 +42,8 @@
 				.then(response => {
 					this.body = '';
 					this.errors = {};
-					flash('Replied successfuly!');
 					this.$emit('created', response.data);
+					flash('Replied successfuly!');
 				})
 				.catch(errors => {
 					this.errors = errors.response.data.errors;

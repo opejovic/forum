@@ -51,7 +51,7 @@
                         <br>It currently has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
                     </div>
 
-                    <div class="card-footer">
+                    <div class="card-footer" v-if="signedIn">
                         <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
                     </div>
                 </div>            

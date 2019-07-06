@@ -15,23 +15,12 @@ class SubscribeToThreadsTest extends TestCase
     /** @test */
     function user_can_subscribe_to_threads()
     {
-        $this->withoutExceptionHandling();
-        // Arrange: existing thread, and authenticated user.
         $thread = factory(Thread::class)->create();
         auth()->login($user = factory(User::class)->create());
 
-        // Act: user posts to thread subscription endpoint and new reply is left for that thread
         $this->json('POST', "{$thread->path()}/subscriptions");
-        $thread->addReply([
-            'body' => 'Leaving a reply',
-            'user_id' => auth()->id(),
-        ]);
-
-        // Assert: assert that the subscription is stored, and user has new notification
-        // Temp for now
+        
         $this->assertCount(1, $thread->subscriptions);
-        // $this->assertCount(1, $user->notifications);
-
     }
 
     /** @test */

@@ -1985,9 +1985,10 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.body = '';
         _this.errors = {};
-        flash('Replied successfuly!');
 
         _this.$emit('created', response.data);
+
+        flash('Replied successfuly!');
       })["catch"](function (errors) {
         _this.errors = errors.response.data.errors;
       });
@@ -38420,57 +38421,65 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "form-group" }, [
-      _c("textarea", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.body,
-            expression: "body"
-          }
-        ],
-        class: _vm.errors.body ? "form-control is-invalid" : "form-control",
-        attrs: {
-          id: "body",
-          name: "body",
-          rows: "5",
-          placeholder: "Have something to say?"
-        },
-        domProps: { value: _vm.body },
-        on: {
-          keydown: _vm.clear,
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+    _vm.signedIn
+      ? _c("div", { staticClass: "form-group" }, [
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.body,
+                expression: "body"
+              }
+            ],
+            class: _vm.errors.body ? "form-control is-invalid" : "form-control",
+            attrs: {
+              id: "body",
+              name: "body",
+              rows: "5",
+              placeholder: "Have something to say?"
+            },
+            domProps: { value: _vm.body },
+            on: {
+              keydown: _vm.clear,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.body = $event.target.value
+              }
             }
-            _vm.body = $event.target.value
-          }
-        }
-      }),
-      _vm._v(" "),
-      _vm.errors.body
-        ? _c(
-            "span",
-            { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-            [
-              _c("strong", {
-                domProps: { textContent: _vm._s(_vm.errors.body[0]) }
-              })
-            ]
+          }),
+          _vm._v(" "),
+          _vm.errors.body
+            ? _c(
+                "span",
+                { staticClass: "invalid-feedback", attrs: { role: "alert" } },
+                [
+                  _c("strong", {
+                    domProps: { textContent: _vm._s(_vm.errors.body[0]) }
+                  })
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary mt-2",
+              attrs: { type: "submit" },
+              on: { click: _vm.addReply }
+            },
+            [_vm._v("Post")]
           )
-        : _vm._e()
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-secondary",
-        attrs: { type: "submit" },
-        on: { click: _vm.addReply }
-      },
-      [_vm._v("Post")]
-    )
+        ])
+      : _c("p", { staticClass: "text-center" }, [
+          _vm._v("Please "),
+          _c("a", { attrs: { href: "/login" } }, [_vm._v("sign in")]),
+          _vm._v(" or "),
+          _c("a", { attrs: { href: "/register" } }, [_vm._v("register")]),
+          _vm._v(" in order to participate in this discussion.")
+        ])
   ])
 }
 var staticRenderFns = []
@@ -38584,9 +38593,9 @@ var render = function() {
       _vm._l(_vm.items, function(reply, index) {
         return _c(
           "div",
+          { key: reply.id },
           [
             _c("reply", {
-              key: reply.id,
               attrs: { data: reply },
               on: {
                 deleted: function($event) {
@@ -50926,6 +50935,8 @@ window.events = new Vue();
 window.flash = function (message) {
   window.events.$emit('flash', message);
 };
+
+Vue.prototype.signedIn = window.authenticated;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -50935,7 +50946,6 @@ window.flash = function (message) {
  */
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
 
 Vue.component('flash', __webpack_require__(/*! ./components/Flash.vue */ "./resources/js/components/Flash.vue")["default"]);
 Vue.component('thread-view', __webpack_require__(/*! ./pages/Thread.vue */ "./resources/js/pages/Thread.vue")["default"]);

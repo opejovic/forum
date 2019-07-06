@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,7 @@ class Thread extends Model
      * Relationships that are included in query.
      */
     protected $with = ['channel'];
+    
     /**
      * summary
      *
@@ -85,7 +87,15 @@ class Thread extends Model
      */
     public function addReply($reply) 
     {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        collect($this->subscriptions)->reject(function ($subscription) use ($reply) {
+            return $reply->owner->is($subscription->user);
+        })->each(function ($subscription) use ($reply) {
+            $subscription->user->notify(new ThreadWasUpdated($this, $reply));
+        });
+        
+        return $reply;
     }
 
     /**

@@ -34,5 +34,12 @@ Route::group(['prefix' => 'replies', 'middleware' => 'auth'], function () {
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');
 
-Route::post('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('thread.subscribe')->middleware('auth');
-Route::delete('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('thread.unsubscribe')->middleware('auth');
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index')->name('notifications.index');
+	Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy')->name('notifications.delete');
+
+	Route::post('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')
+		->name('thread.subscribe');
+	Route::delete('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')
+		->name('thread.unsubscribe');
+});
