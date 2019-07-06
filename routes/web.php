@@ -23,10 +23,15 @@ Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy')->name(
 
 Route::get('/threads/{channelId}/{thread}/replies', 'RepliesController@index')->name('replies.index');
 Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware('auth');
-Route::patch('/replies/{reply}', 'RepliesController@update')->name('replies.update')->middleware('auth');
-Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.delete')->middleware('auth');
 
-Route::post('/replies/{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite')->middleware('auth');
-Route::delete('/replies/{reply}/favorites', 'ReplyFavoritesController@destroy')->name('reply.unfavorite')->middleware('auth');
+Route::group(['prefix' => 'replies', 'middleware' => 'auth'], function () {
+	Route::patch('{reply}', 'RepliesController@update')->name('replies.update');
+	Route::delete('{reply}', 'RepliesController@destroy')->name('replies.delete');
+
+	Route::post('{reply}/favorites', 'ReplyFavoritesController@store')->name('reply.favorite');
+	Route::delete('{reply}/favorites', 'ReplyFavoritesController@destroy')->name('reply.unfavorite');
+});
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');
+
+Route::post('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('thread.subscribe')->middleware('auth');
