@@ -50,6 +50,10 @@
                         <a href="{{ route('profiles.show', $thread->creator)}}">{{ $thread->creator->name }}</a>.
                         <br>It currently has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
                     </div>
+
+                    <div class="card-footer">
+                        <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                    </div>
                 </div>            
             </div>
         </div>

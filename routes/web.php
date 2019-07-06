@@ -35,3 +35,4 @@ Route::group(['prefix' => 'replies', 'middleware' => 'auth'], function () {
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profiles.show');
 
 Route::post('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('thread.subscribe')->middleware('auth');
+Route::delete('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('thread.unsubscribe')->middleware('auth');

@@ -136,4 +136,14 @@ class Thread extends Model
             ->delete();
     }
 
+    /**
+     * Is the user subscribed to the thread?
+     *
+     * @return bool
+     */
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()->where('user_id', auth()->id())->exists();        
+    }
+
 }
