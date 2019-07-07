@@ -6,6 +6,7 @@ use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
 class NotificationsTest extends TestCase
@@ -33,17 +34,8 @@ class NotificationsTest extends TestCase
     /** @test */
     function user_can_fetch_all_notifications()
     {
-        $this->withoutExceptionHandling();
-        $thread = factory(Thread::class)->create();
         auth()->login($user = factory(User::class)->create());
-        $thread->subscribe();
-
-        $otherUser = factory(User::class)->create();
-
-        $thread->addReply([
-            'body' => 'Some random body here',
-            'user_id' => $otherUser->id
-        ]);
+        factory(DatabaseNotification::class)->create();
 
         $this->assertCount(1, $user->unreadNotifications);
 
@@ -60,26 +52,14 @@ class NotificationsTest extends TestCase
     /** @test */
     function user_can_mark_notification_as_read()
     {
-        // Arrange
-        $thread = factory(Thread::class)->create();
         auth()->login($user = factory(User::class)->create());
-        $thread->subscribe();
-
-        $otherUser = factory(User::class)->create();
-
-        $thread->addReply([
-            'body' => 'Some random body here',
-            'user_id' => $otherUser->id
-        ]);
+        factory(DatabaseNotification::class)->create();
 
         $this->assertCount(1, $user->unreadNotifications);
         $notification = $user->unreadNotifications->first();
 
-        // Act
-        // user deletes the notifications
         $response = $this->json('DELETE', "/profiles/{$user->name}/notifications/{$notification->id}");
 
-        // Assert
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->unreadNotifications);
     }
