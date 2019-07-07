@@ -16,7 +16,6 @@ window.flash = function (message) {
 
 Vue.prototype.signedIn = window.authenticated;
 
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -32,6 +31,7 @@ Vue.component('flash', require('./components/Flash.vue').default);
 
 Vue.component('thread-view', require('./pages/Thread.vue').default);
 Vue.component('paginator', require('./components/Paginator.vue').default);
+Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

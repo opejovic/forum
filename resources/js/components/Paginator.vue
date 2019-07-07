@@ -21,9 +21,9 @@
 		props: ['dataSet'],
 		data() {
 			return {
-				page: '',
-				prevUrl: '',
-				nextUrl: '',
+				page: 1,
+				prevUrl: false,
+				nextUrl: false,
 				pages: '',
 			}
 		},
