@@ -9,135 +9,148 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     use RecordsActivity;
-
+    
     /**
-     * Attributes that are not mass-assignable.
-     */
+    * Attributes that are not mass-assignable.
+    */
     protected $guarded = [];
     
     /**
-     * Relationships that are included in query.
-     */
+    * Relationships that are included in query.
+    */
     protected $with = ['channel'];
     
     /**
-     * summary
-     *
-     * @return void
-     * @author 
-     */
+    * summary
+    *
+    * @return void
+    * @author
+    */
     protected static function boot()
     {
         parent::boot();
-
+        
         // Include thread creator in every thread query.
         static::addGlobalScope('creator', function ($builder) {
             $builder->with('creator');
         });
-
+        
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
     }
-
+    
     /**
-     * Returns a string representation of a threads path.
-     *
-     * @return string
-     */
+    * Returns a string representation of a threads path.
+    *
+    * @return string
+    */
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->id}";
     }
-
+    
     /**
-     * Thread has a creator.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    * Thread has a creator.
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    
     /**
-     * Thread belongs to a channel.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    * Thread belongs to a channel.
+    *
+    * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
     public function channel()
     {
         return $this->belongsTo(Channel::class);
     }
-
+    
     /**
-     * A Thread has many replies.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
-     */
+    * A Thread has many replies.
+    *
+    * @return Illuminate\Database\Eloquent\Relations\HasMany
+    */
     public function replies()
     {
         return $this->hasMany(Reply::class);
     }
-
+    
     /**
-     * Create a reply for the thread.
-     *
-     * @return App\Models\Reply
-     */
-    public function addReply($reply) 
+    * Create a reply for the thread.
+    *
+    * @return App\Models\Reply
+    */
+    public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
-
+        
+        $this->notifySubscribers($reply);
+        
+        return $reply;
+    }
+    
+    /**
+    * Notify thread subscribers about the new reply.
+    *
+    *
+    * @param \App\Models\Reply $reply 
+    * @return type
+    * @throws conditon
+    **/
+    public function notifySubscribers($reply)
+    {
         collect($this->subscriptions)->reject(function ($subscription) use ($reply) {
             return $reply->owner->is($subscription->user);
         })->each(function ($subscription) use ($reply) {
             $subscription->user->notify(new ThreadWasUpdated($this, $reply));
         });
-        
-        return $reply;
     }
-
+    
     /**
-     * Apply the filters for the thread.
-     *
-     * @param Illuminate\Database\Eloquent\QueryBuilder $query
-     * @param ThreadFilters $filters
-     * @return void
-     */
+    * Apply the filters for the thread.
+    *
+    * @param Illuminate\Database\Eloquent\QueryBuilder $query
+    * @param ThreadFilters $filters
+    * @return void
+    */
     public function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
     }
     /**
-     * Thread has many subscriptions.
-     *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
-     */
+    * Thread has many subscriptions.
+    *
+    * @return Illuminate\Database\Eloquent\Relations\HasMany
+    */
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
     }
-
+    
     /**
-     * Subscribe a user to the thread.
-     *
-     * @param App\Models\User $userId
-     * @return void
-     */
+    * Subscribe a user to the thread.
+    *
+    * @param App\Models\User $userId
+    * @return void
+    */
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
-        ]);        
+		]);
     }
-
+        
     /**
-     * Unsubscribe the user from the thread.
-     *
-     * @param App\Models\User $userId
-     * @return void
-     */
+    * Unsubscribe the user from the thread.
+    *
+    * @param App\Models\User $userId
+    * @return void
+    */
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()
@@ -145,15 +158,14 @@ class Thread extends Model
             ->first()
             ->delete();
     }
-
+        
     /**
-     * Is the user subscribed to the thread?
-     *
-     * @return bool
-     */
+    * Is the user subscribed to the thread?
+    *
+    * @return bool
+    */
     public function getIsSubscribedToAttribute()
     {
-        return $this->subscriptions()->where('user_id', auth()->id())->exists();        
+        return $this->subscriptions()->where('user_id', auth()->id())->exists();
     }
-
 }
