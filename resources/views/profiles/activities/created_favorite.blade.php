@@ -2,8 +2,8 @@
 	@slot('heading')
 		<div>
 			 
-			<a href="{{ $activity->subject->favorited->thread->path() }}#reply-{{ $activity->subject->favorited->id}}">
-				You	favorited a reply in {{ $activity->subject->favorited->thread->title }}
+			<a href="{{ $activity->subject->favorable->thread->path() }}#reply-{{ $activity->subject->favorable->id}}">
+				You	favorable a reply in {{ $activity->subject->favorable->thread->title }}
 			</a>
 			
 		</div>
@@ -12,6 +12,6 @@
 	@endslot
 
 	@slot('body')
-		{{ $activity->subject->favorited->body }}
+		{{ $activity->subject->favorable->body }}
 	@endslot
 @endcomponent

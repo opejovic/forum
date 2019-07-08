@@ -18,7 +18,7 @@ class Channel extends Model
     /**
      * Channel has many threads.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function threads()
     {

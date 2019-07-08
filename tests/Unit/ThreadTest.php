@@ -102,4 +102,14 @@ class ThreadTest extends TestCase
 
 		$this->assertTrue($thread->isSubscribedTo);
 	}
+
+    /** @test */
+    function a_thread_notifies_all_registered_subscribers_when_a_reply_is_added()
+    {
+        // Arrange: existing thread and subscribers
+
+        // Act: reply is added to the thread
+
+        // Assert: subscribers are notified
+    }
 }

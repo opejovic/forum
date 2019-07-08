@@ -7,20 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-	use RecordsActivity;
+    use RecordsActivity;
 
-	/**
-	 * Fields that are not mass-assignable.
-	 */
+    /**
+     * Fields that are not mass-assignable.
+     */
     protected $guarded = [];
 
     /**
-     * summary
+     * Favorable model.
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function favorited()
+    public function favorable()
     {
         return $this->morphTo();
     }

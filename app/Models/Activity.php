@@ -14,8 +14,7 @@ class Activity extends Model
     /**
      * summary
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function subject()
     {
@@ -23,10 +22,12 @@ class Activity extends Model
     }
 
     /**
-     * summary
+     * Returns the activity feed for the given user.
      *
-     * @return void
-     * @author 
+     * @param $user
+     * @param int $take
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public static function feed($user, $take = 50)
     {

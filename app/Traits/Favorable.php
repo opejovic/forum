@@ -27,7 +27,7 @@ trait Favorable
      */
     public function favorites()
     {
-        return $this->morphMany(Favorite::class, 'favorited');
+        return $this->morphMany(Favorite::class, 'favorable');
     }
 
     /**
@@ -65,7 +65,7 @@ trait Favorable
     }
 
     /**
-     * Has reply been favorited?
+     * Has reply been favorable?
      *
      * @return bool
      */
@@ -75,7 +75,7 @@ trait Favorable
     }
 
     /**
-     * Has the model been favorited?
+     * Has the model been favorable?
      *
      * @return bool
      */
