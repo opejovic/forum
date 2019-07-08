@@ -1,56 +1,56 @@
 <template>
-	<button :class="classes" @click="toggle">
-		<i class="material-icons small">
-			favorite
-		</i>
-		<span class="small" v-text="count"></span>
-	</button>
+    <button :class="classes" @click="toggle">
+        <i class="material-icons small">
+            favorite
+        </i>
+        <span class="small" v-text="count"></span>
+    </button>
 </template>
 
 <script>
-	export default {
-		props: ['reply'],
-		
-		data() {
-			return {
-				count: this.reply.favoritesCount,
-				active: this.reply.isFavorited,
-			}
-		},
+    export default {
+        props: ['reply'],
 
-		computed: {
-			classes() {
-				return ['btn', this.active ? 'btn-primary' : 'btn-outline-secondary'];
-			},
+        data() {
+            return {
+                count: this.reply.favoritesCount,
+                active: this.reply.isFavorited,
+            }
+        },
 
-			endpoint() {
-				return `/replies/${this.reply.id}/favorites`; 
-			}
-		},
+        computed: {
+            classes() {
+                return ['btn', this.active ? 'btn-primary' : 'btn-outline-secondary'];
+            },
 
-		methods: {
-			toggle() {
-				this.active ? this.delete() : this.create();
-			},
+            endpoint() {
+                return `/replies/${this.reply.id}/favorites`;
+            }
+        },
 
-			create() {
-				axios.post(this.endpoint).then().catch();
-				this.active = true;
-				this.count++;
-			},
+        methods: {
+            toggle() {
+                this.active ? this.delete() : this.create();
+            },
 
-			delete() {
-				axios.delete(this.endpoint).then().catch();
-				this.active = false;
-				this.count--;
-			},
-		},
-	}
+            create() {
+                axios.post(this.endpoint).then().catch();
+                this.active = true;
+                this.count++;
+            },
+
+            delete() {
+                axios.delete(this.endpoint).then().catch();
+                this.active = false;
+                this.count--;
+            },
+        },
+    }
 </script>
 
 <style>
-	.small { 
-		font-size: 15px;
-		vertical-align: middle; 
-	}
+    .small {
+        font-size: 15px;
+        vertical-align: middle;
+    }
 </style>

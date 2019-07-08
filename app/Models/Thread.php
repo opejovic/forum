@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
@@ -59,32 +60,34 @@ class Thread extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
+
     /**
-    * Thread belongs to a channel.
-    *
-    * @return Illuminate\Database\Eloquent\Relations\BelongsTo
-    */
+     * Thread belongs to a channel.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function channel()
     {
         return $this->belongsTo(Channel::class);
     }
-    
+
     /**
-    * A Thread has many replies.
-    *
-    * @return Illuminate\Database\Eloquent\Relations\HasMany
-    */
+     * A Thread has many replies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function replies()
     {
         return $this->hasMany(Reply::class);
     }
-    
+
     /**
-    * Create a reply for the thread.
-    *
-    * @return App\Models\Reply
-    */
+     * Create a reply for the thread.
+     *
+     * @param $reply
+     *
+     * @return \App\Models\Reply
+     */
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
@@ -93,15 +96,14 @@ class Thread extends Model
         
         return $reply;
     }
-    
+
     /**
-    * Notify thread subscribers about the new reply.
-    *
-    *
-    * @param \App\Models\Reply $reply 
-    * @return type
-    * @throws conditon
-    **/
+     * Notify thread subscribers about the new reply.
+     *
+     *
+     * @param \App\Models\Reply $reply
+     * @return void
+     */
     public function notifySubscribers($reply)
     {
         collect($this->subscriptions)->reject(function ($subscription) use ($reply) {
@@ -114,7 +116,7 @@ class Thread extends Model
     /**
     * Apply the filters for the thread.
     *
-    * @param Illuminate\Database\Eloquent\QueryBuilder $query
+    * @param \Illuminate\Database\Eloquent\Builder $query
     * @param ThreadFilters $filters
     * @return void
     */
@@ -122,11 +124,12 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
+
     /**
-    * Thread has many subscriptions.
-    *
-    * @return Illuminate\Database\Eloquent\Relations\HasMany
-    */
+     * Thread has many subscriptions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
@@ -135,7 +138,7 @@ class Thread extends Model
     /**
     * Subscribe a user to the thread.
     *
-    * @param App\Models\User $userId
+    * @param \App\Models\User $userId
     * @return void
     */
     public function subscribe($userId = null)
@@ -144,13 +147,14 @@ class Thread extends Model
             'user_id' => $userId ?: auth()->id()
 		]);
     }
-        
+
     /**
-    * Unsubscribe the user from the thread.
-    *
-    * @param App\Models\User $userId
-    * @return void
-    */
+     * Unsubscribe the user from the thread.
+     *
+     * @param \App\Models\User $userId
+     *
+     * @return void
+     */
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()

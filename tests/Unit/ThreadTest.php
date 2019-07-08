@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -38,11 +40,9 @@ class ThreadTest extends TestCase
 	    $replyB = factory(Reply::class)->create(['thread_id' => $thread->id]);
 	    $replyC = factory(Reply::class)->create();
 
-	    $replies = $thread->replies;
-
-	    $this->assertTrue($replies->contains($replyA));
-	    $this->assertTrue($replies->contains($replyB));
-	    $this->assertFalse($replies->contains($replyC));
+	    $this->assertTrue($thread->replies->contains($replyA));
+	    $this->assertTrue($thread->replies->contains($replyB));
+	    $this->assertFalse($thread->replies->contains($replyC));
 	}
 
 	/** @test */
@@ -69,13 +69,10 @@ class ThreadTest extends TestCase
 	/** @test */
 	function thread_can_be_subscribed_to()
 	{
-	    // Arrange: we have a thread
 	    $thread = factory(Thread::class)->create();
 
-	    // Act: we subscribe to a thread
 	    $thread->subscribe($userId = 1);
 
-	    // Assert: thread has 1 subscriber
 	    $this->assertCount(1, $thread->subscriptions);
 	}
 
@@ -106,10 +103,17 @@ class ThreadTest extends TestCase
     /** @test */
     function a_thread_notifies_all_registered_subscribers_when_a_reply_is_added()
     {
-        // Arrange: existing thread and subscribers
+        Notification::fake();
 
-        // Act: reply is added to the thread
+        $thread = factory(Thread::class)->create();
+        auth()->login($user = factory(User::class)->create());
+        $thread->subscribe();
 
-        // Assert: subscribers are notified
+        $thread->addReply([
+            'body' => 'Some body here',
+            'user_id' => factory(User::class)->create()->id,
+        ]);
+
+        Notification::assertSentTo($user, ThreadWasUpdated::class);
     }
 }

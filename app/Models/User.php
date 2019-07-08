@@ -49,17 +49,17 @@ class User extends Authenticatable
     /**
      * User has many threads.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function threads()
     {
-        return $this->hasMany(Thread::class)->latest();        
+        return $this->hasMany(Thread::class)->latest();
     }
 
     /**
      * User has many activities.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function activities()
     {
@@ -69,20 +69,22 @@ class User extends Authenticatable
     /**
      * User can publish a thread.
      *
-     * @return App\Models\Thread
+     * @param $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function publishThread($attributes)
     {
-        return $this->threads()->create($attributes);        
+        return $this->threads()->create($attributes);
     }
 
     /**
      * User can have many replies.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
     {
-        return $this->hasMany(Reply::class);        
+        return $this->hasMany(Reply::class);
     }
 }
