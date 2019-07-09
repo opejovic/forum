@@ -11,7 +11,7 @@ class ThreadSubscription extends Model
     /**
      * ThreadSubscription belongs to a User.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {

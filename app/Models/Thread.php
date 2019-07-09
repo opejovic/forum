@@ -86,7 +86,7 @@ class Thread extends Model
      *
      * @param $reply
      *
-     * @return \App\Models\Reply
+     * @return \App\Models\Reply|\Illuminate\Database\Eloquent\Model
      */
     public function addReply($reply)
     {
@@ -154,6 +154,7 @@ class Thread extends Model
      * @param \App\Models\User $userId
      *
      * @return void
+     * @throws \Exception
      */
     public function unsubscribe($userId = null)
     {

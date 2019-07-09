@@ -6826,7 +6826,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.small { \n\tfont-size: 15px;\n\tvertical-align: middle;\n}\n", ""]);
+exports.push([module.i, "\n.small {\n    font-size: 15px;\n    vertical-align: middle;\n}\n", ""]);
 
 // exports
 
@@ -38403,7 +38403,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("button", { class: _vm.classes, on: { click: _vm.toggle } }, [
     _c("i", { staticClass: "material-icons small" }, [
-      _vm._v("\n\t\tfavorite\n\t")
+      _vm._v("\n        favorite\n    ")
     ]),
     _vm._v(" "),
     _c("span", {
