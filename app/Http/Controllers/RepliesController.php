@@ -39,17 +39,11 @@ class RepliesController extends Controller
      * @param $channelId
      * @param \App\Models\Thread $thread
      *
-     * @param \App\Spam $spam
-     *
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        request()->validate([
-            'body' => ['required', 'min:2'],
-        ]);
-
-        $spam->detect(request('body'));
+        $this->validateReply(request('body'));
 
         $reply = $thread->addReply([
             'user_id' => Auth::user()->id,
@@ -66,8 +60,9 @@ class RepliesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Reply $reply
+     *
+     * @return void
      */
     public function show(Reply $reply)
     {
@@ -77,8 +72,9 @@ class RepliesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Reply $reply
+     *
+     * @return void
      */
     public function edit(Reply $reply)
     {
@@ -88,13 +84,17 @@ class RepliesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reply  $reply
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Reply $reply
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
+
+        $this->validateReply(request('body'));
 
         $reply->update(request(['body']));
 
@@ -108,8 +108,10 @@ class RepliesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Reply  $reply
+     * @param \App\Models\Reply $reply
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Reply $reply)
     {
@@ -122,5 +124,20 @@ class RepliesController extends Controller
         }
 
         return back()->with('flash', 'Reply deleted.');
+    }
+
+
+    /**
+     * Validate the reply.
+     *
+     * @param $body
+     */
+    public function validateReply($body)
+    {
+        request()->validate([
+            'body' => ['required', 'min:2'],
+        ]);
+
+        resolve(Spam::class)->detect($body);
     }
 }
