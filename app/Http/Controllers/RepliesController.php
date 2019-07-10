@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Spam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Exception;
 
 class RepliesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $channelId
+     * @param \App\Models\Thread $thread
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function index($channelId, Thread $thread)
     {
@@ -32,14 +37,20 @@ class RepliesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param $channelId
+     * @param \App\Models\Thread $thread
+     *
+     * @param \App\Spam $spam
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, Spam $spam)
     {
         request()->validate([
             'body' => ['required', 'min:2'],
         ]);
+
+        $spam->detect(request('body'));
 
         $reply = $thread->addReply([
             'user_id' => Auth::user()->id,

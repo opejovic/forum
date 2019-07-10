@@ -122,7 +122,6 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     function authorized_users_can_update_replies()
     {
-        $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id,
@@ -135,5 +134,24 @@ class ParticipateInForumTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals('Updated', $reply->fresh()->body);
+    }
+    
+    /** @test */
+    function replies_that_contain_spam_may_not_be_created()
+    {
+        $this->withoutExceptionHandling();
+        $user = factory(User::class)->create();
+        $thread = factory(Thread::class)->create();
+
+        try {
+            $this->actingAs($user)->json('POST', "threads/{$thread->channel->slug}/{$thread->id}/replies", [
+                'body' => 'Yahoo Customer Support'
+            ]);
+        } catch(\Exception $exception) {
+            $this->assertCount(0, $thread->replies);
+            return;
+        }
+
+        $this->fail("Reply created even though it contains spam.");
     }
 }
