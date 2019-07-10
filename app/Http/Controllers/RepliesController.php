@@ -43,18 +43,19 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread)
     {
-        $this->validateReply(request('body'));
 
-        $reply = $thread->addReply([
-            'user_id' => Auth::user()->id,
-            'body' => request('body'),
-        ]);
+        try {
+            $this->validateReply(request('body'));
 
-        if (request()->wantsJson()) {
-            return response($reply->load('owner'), 200);
+            $reply = $thread->addReply([
+                'user_id' => Auth::user()->id,
+                'body'    => request('body'),
+            ]);
+        } catch (\Exception $e) {
+            return response(['message' => 'Sorry, your message cant be saved at this time.'], 422);
         }
 
-        return back()->with('flash', 'Your reply has been posted.');;
+        return response($reply->load('owner'), 200);
     }
 
     /**
@@ -94,15 +95,14 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        $this->validateReply(request('body'));
-
-        $reply->update(request(['body']));
-
-        if (request()->wantsJson()) {
-            return response(['message' => 'Reply updated!'], 200);
+        try {
+            $this->validateReply(request('body'));
+            $reply->update(request(['body']));
+        } catch (\Exception $e) {
+            return response(['message' => 'Sorry, your message cant be saved at this time.'], 422);
         }
 
-        return back()->with('message', 'Reply updated!');
+        return response(['message' => 'Reply updated!'], 200);
     }
 
     /**

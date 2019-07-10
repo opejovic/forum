@@ -2,7 +2,7 @@
 	<div>
 		<div class="form-group" v-if="signedIn">
 			<textarea 
-			:class="errors.body ? 'form-control is-invalid' : 'form-control'"
+			:class="errors ? 'form-control is-invalid' : 'form-control'"
 			id="body" 
 			name="body" 
 			rows="5" 
@@ -10,8 +10,8 @@
 			v-model="body"
 			@keydown="clear"></textarea>
 
-			<span class="invalid-feedback" role="alert" v-if="errors.body">
-				<strong v-text="errors.body[0]"></strong>
+			<span class="invalid-feedback" role="alert" v-if="errors">
+				<strong v-text="errors"></strong>
 			</span>
 
 			<button type="submit" class="btn btn-secondary mt-2" @click="addReply">Post</button>
@@ -30,7 +30,7 @@
 		data() {
 			return {
 				body: null,
-				errors: {},
+				errors: false,
 			}
 		},
 
@@ -41,17 +41,18 @@
 				})
 				.then(response => {
 					this.body = '';
-					this.errors = {};
+					this.errors = false;
 					this.$emit('created', response.data);
 					flash('Replied successfuly!');
 				})
 				.catch(errors => {
-					this.errors = errors.response.data.errors;
+                    this.errors = errors.response.data.message;
+                    flash('Your message contains spam.', 'danger');
 				});
 			},
 
 			clear() {
-				this.errors = {};
+				this.errors = false;
 			}
 		},
 	}

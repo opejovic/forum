@@ -20,7 +20,7 @@
 				</div>
 
 				<button class="btn btn-sm btn-primary" @click="update">Update</button>
-				<button class="btn btn-sm btn-link" @click="editing = false">Cancel</button>
+				<button class="btn btn-sm btn-link" @click="clearEdit">Cancel</button>
 			</div>
 
 			<div v-else v-text="body">
@@ -71,7 +71,9 @@
 					this.editing = false;
 					flash(response.data.message);
 				})
-				.catch();
+				.catch(error => {
+				    flash(error.response.data.message, 'danger');
+                });
 			},
 
 			deleteReply() {
@@ -79,6 +81,11 @@
 				this.$emit('deleted', this.data.id);
 				flash('Reply deleted!');
 			},
+
+            clearEdit() {
+			    this.editing = false;
+			    this.body = this.data.body;
+            }
 		},
 	}
 </script>
