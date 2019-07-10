@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Spam;
+use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use mysql_xdevapi\Exception;
 
 class RepliesController extends Controller
 {
