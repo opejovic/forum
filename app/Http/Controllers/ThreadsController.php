@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Models\Channel;
 use App\Models\Thread;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,12 +13,15 @@ class ThreadsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \App\Models\Channel $channel
+     * @param \App\Filters\ThreadFilters $filters
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters)
-    {  
+    {
         return view('threads.index', [
-            'threads' => $this->getThreads($channel, $filters)
+            'threads' => $this->getThreads($filters, $channel)
         ]);
     }
 
@@ -61,11 +63,18 @@ class ThreadsController extends Controller
      * Display the specified resource.
      *
      * @param  $channelId
-     * @param  \App\Models\Thread  $thread
+     * @param \App\Models\Thread $thread
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function show($channelId, Thread $thread)
     {
+        // Record that the user visited this page.
+        if (Auth::check()) {
+            Auth::user()->read($thread);
+        }
+
         return view('threads.show', [
             'thread' => $thread,
         ]);
@@ -97,8 +106,11 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Thread  $thread
+     * @param \App\Models\Channel $channel
+     * @param \App\Models\Thread $thread
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Channel $channel, Thread $thread)
     {
@@ -116,10 +128,13 @@ class ThreadsController extends Controller
     /**
      * summary
      *
+     * @param $filters
+     * @param null $channel
+     *
      * @return void
-     * @author 
+     * @author
      */
-    public function getThreads($channel = null, $filters)
+    public function getThreads($filters, $channel = null)
     {
         $threads = Thread::filter($filters)->latest();
 

@@ -8,9 +8,20 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
-                            <a href="{{ $thread->path() }}">
-                                <strong class="">{{ $thread->title }}</strong>
-                            </a>
+                                <a href="{{ $thread->path() }}">
+                                    @guest()
+                                        {{ $thread->title }}
+                                    @else
+                                        @if($thread->hasUpdatesFor(auth()->user()))
+                                            <strong>{{ $thread->title }}</strong>
+                                        @else
+                                            {{ $thread->title }}
+                                        @endif
+                                    @endguest
+
+                                </a>
+
+
                         </div>
 
                         <div>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -86,5 +87,29 @@ class User extends Authenticatable
     public function replies()
     {
         return $this->hasMany(Reply::class);
+    }
+
+    /**
+     * Get the cache key for when the user visited thread.
+     *
+     * @param $thread
+     *
+     * @return string
+     */
+    public function visitedThreadCacheKey($thread)
+    {
+        return sprintf("users.%s.visits.%s", Auth::user()->id, $thread->id);
+    }
+
+    /**
+     * User read the thread.
+     *
+     * @param $thread
+     *
+     * @throws \Exception
+     */
+    public function read($thread)
+    {
+        cache()->forever($this->visitedThreadCacheKey($thread), now());
     }
 }

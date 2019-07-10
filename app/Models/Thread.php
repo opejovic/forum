@@ -173,4 +173,19 @@ class Thread extends Model
     {
         return $this->subscriptions()->where('user_id', auth()->id())->exists();
     }
+
+    /**
+     * @param $user
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasUpdatesFor($user = null)
+    {
+        // Look into cache for the proper key
+        // Compare that carbon instance with $thread->updated_at
+        $user = $user ?: auth()->user();
+
+        return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+    }
 }
