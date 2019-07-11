@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Rules\OncePerMinuteOnly;
@@ -40,25 +41,16 @@ class RepliesController extends Controller
      * @param $channelId
      * @param \App\Models\Thread $thread
      *
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\CreatePostRequest $request
+     *
+     * @return \App\Models\Reply|\Illuminate\Database\Eloquent\Model
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreatePostRequest $request)
     {
-        request()->validate([
-            'body' => [
-                'required',
-                'min:2',
-                new Spamfree,
-                new OncePerMinuteOnly
-            ],
-        ]);
-
-        $reply = $thread->addReply([
+        return $thread->addReply([
             'user_id' => Auth::user()->id,
             'body'    => request('body'),
-        ]);
-
-        return response($reply->load('owner'), 200);
+        ])->load('owner');
     }
 
     /**

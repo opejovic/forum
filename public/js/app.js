@@ -2005,8 +2005,8 @@ __webpack_require__.r(__webpack_exports__);
 
         flash("Replied successfuly!");
       })["catch"](function (errors) {
+        console.log(errors.response.data);
         _this.errors = errors.response.data.errors;
-        console.log(_this.errors); // flash("Your message contains spam.", "danger");
       });
     },
     clear: function clear() {

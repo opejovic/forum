@@ -56,9 +56,8 @@ export default {
                     flash("Replied successfuly!");
                 })
                 .catch(errors => {
+                    console.log(errors.response.data);
                     this.errors = errors.response.data.errors;
-                    console.log(this.errors);
-                    // flash("Your message contains spam.", "danger");
                 });
         },
 

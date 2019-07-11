@@ -31,7 +31,7 @@ class ParticipateInForumTest extends TestCase
             ->from($thread->path())
             ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
                 'body' => 'More Cowbell, please.',
-            ])->assertStatus(200);
+            ])->assertStatus(201);
 
         $this->assertCount(1, $thread->fresh()->replies);
         $this->assertEquals(1, $thread->fresh()->replies_count);
@@ -157,7 +157,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)->json('POST', "{$thread->path()}/replies", [
             'body' => 'First reply'
-        ])->assertStatus(200);
+        ])->assertStatus(201);
 
         $this->assertCount(1, $user->replies);
 
