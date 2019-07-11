@@ -45,4 +45,13 @@ class UserTest extends TestCase
 
 	    $this->assertTrue($user->replies->contains($reply));
 	}
+
+	/** @test */
+	function it_can_get_its_most_recent_reply()
+	{
+        $user = factory(User::class)->create();
+        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+
+        $this->assertEquals($reply->id, $user->lastReply->id);
+	}
 }

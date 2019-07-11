@@ -30,4 +30,15 @@ class ReplyTest extends TestCase
 
 	    $this->assertTrue($reply->isFavorited());
 	}
+
+	/** @test */
+	function it_can_tell_if_it_was_just_published()
+	{
+        $reply = factory(Reply::class)->create();
+
+        $this->assertTrue($reply->wasJustPublished());
+
+        $reply->created_at = now()->subMonth();
+        $this->assertFalse($reply->wasJustPublished());
+	}
 }

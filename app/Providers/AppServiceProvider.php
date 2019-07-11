@@ -31,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('channels', $channels);
         });
 
-        \Gate::before(function ($user) {
-            if ($user->email === 'john@example.com') {
-                return true;
-            }
-        });
+//        \Gate::before(function ($user) {
+//            if ($user->email === 'john@example.com') {
+//                return true;
+//            }
+//        });
     }
 }

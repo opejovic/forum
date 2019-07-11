@@ -42,15 +42,25 @@ class Reply extends Model
     {
     	return $this->belongsTo(User::class, 'user_id');
     }
-    
+
     /**
      * Reply belongs to a Thread.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function thread() 
     {
         return $this->belongsTo(Thread::class);
+    }
+
+    /**
+     * Was reply published less than a minute ago?
+     *
+     * @return boolean
+     */
+    public function wasJustPublished()
+    {
+        return $this->created_at->gt(now()->subMinute());
     }
 
     /**

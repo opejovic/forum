@@ -2,10 +2,9 @@
 
 namespace App\Rules;
 
-use App\Inspections\Spam;
 use Illuminate\Contracts\Validation\Rule;
 
-class SpamFree implements Rule
+class OncePerMinuteOnly implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,11 +25,10 @@ class SpamFree implements Rule
      */
     public function passes($attribute, $value)
     {
-        try {
-            return ! resolve(Spam::class)->detect($value);
-        } catch (\Exception $e) {
-            return false;
-        }
+        $lastReply = auth()->user()->lastReply;
+        if (! $lastReply) return true;
+
+        return ! auth()->user()->lastReply->wasJustPublished();
     }
 
     /**
@@ -40,6 +38,6 @@ class SpamFree implements Rule
      */
     public function message()
     {
-        return 'The :attribute contains spam.';
+        return 'You are posting too frequently. Wait one minute before posting again.';
     }
 }

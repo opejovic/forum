@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Rules\OncePerMinuteOnly;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,12 @@ class RepliesController extends Controller
     public function store($channelId, Thread $thread)
     {
         request()->validate([
-            'body' => ['required', 'min:2', new Spamfree],
+            'body' => [
+                'required',
+                'min:2',
+                new Spamfree,
+                new OncePerMinuteOnly
+            ],
         ]);
 
         $reply = $thread->addReply([
@@ -120,7 +126,7 @@ class RepliesController extends Controller
         $reply->delete();
 
         if (request()->wantsJson()) {
-            return response(['message' => 'Reply deleted.'], 200);    
+            return response(['message' => 'Reply deleted.'], 200);
         }
 
         return back()->with('flash', 'Reply deleted.');

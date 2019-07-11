@@ -45,7 +45,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->json('POST',"/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
                 'body' => null,
             ])->assertJsonValidationErrors('body');
     }
@@ -58,7 +58,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->json('POST',"/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
                 'body' => 'A',
             ])->assertJsonValidationErrors('body');
     }
@@ -90,7 +90,7 @@ class ParticipateInForumTest extends TestCase
         $thread = factory(Thread::class)->create();
         $reply = factory(Reply::class)->create([
             'thread_id' => $thread->id,
-            'user_id' => $user->id
+            'user_id'   => $user->id
         ]);
         $this->assertCount(1, $user->replies);
 
@@ -107,7 +107,7 @@ class ParticipateInForumTest extends TestCase
         $john = factory(User::class)->create();
         $johnsReply = factory(Reply::class)->create([
             'user_id' => $john->id,
-            'body' => 'Before Update'
+            'body'    => 'Before Update'
         ]);
         $notJohn = factory(User::class)->create();
 
@@ -125,7 +125,7 @@ class ParticipateInForumTest extends TestCase
         $user = factory(User::class)->create();
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id,
-            'body' => 'Before Update'
+            'body'    => 'Before Update'
         ]);
 
         $response = $this->actingAs($user)->json('PATCH', "/replies/{$reply->id}", [
@@ -135,23 +135,36 @@ class ParticipateInForumTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals('Updated', $reply->fresh()->body);
     }
-    
+
     /** @test */
     function replies_that_contain_spam_may_not_be_created()
     {
-        $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
         $thread = factory(Thread::class)->create();
 
-        try {
-            $this->actingAs($user)->json('POST', "threads/{$thread->channel->slug}/{$thread->id}/replies", [
-                'body' => 'Yahoo Customer Support'
-            ]);
-        } catch(\Exception $exception) {
-            $this->assertCount(0, $thread->replies);
-            return;
-        }
+        $this->actingAs($user)->json('POST', "threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            'body' => 'Yahoo Customer Support'
+        ])->assertJsonValidationErrors('body');
 
-        $this->fail("Reply created even though it contains spam.");
+        $this->assertCount(0, $thread->replies);
+    }
+    
+    /** @test */
+    function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $thread = factory(Thread::class)->create();
+        auth()->login($user = factory(User::class)->create());
+
+        $this->actingAs($user)->json('POST', "{$thread->path()}/replies", [
+            'body' => 'First reply'
+        ])->assertStatus(200);
+
+        $this->assertCount(1, $user->replies);
+
+        $this->actingAs($user->fresh())->json('POST', "{$thread->path()}/replies", [
+            'body' => 'Second reply'
+        ])->assertStatus(422);
+
+        $this->assertCount(1, $user->fresh()->replies);
     }
 }
