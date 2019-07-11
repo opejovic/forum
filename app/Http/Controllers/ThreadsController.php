@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\ThreadFilters;
-use App\Inspections\Spam;
-use App\Models\Channel;
 use App\Models\Thread;
+use App\Models\Channel;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
+use App\Filters\ThreadFilters;
 use Illuminate\Support\Facades\Auth;
 
 class ThreadsController extends Controller
@@ -40,27 +40,24 @@ class ThreadsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Inspections\Spam $spam
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Spam $spam)
+    public function store(Request $request)
     {
         request()->validate([
             'channel_id' => ['required', 'exists:channels,id'],
-            'title' => ['required', 'min:2'],
-            'body' => ['required', 'min:2'],
+            'title'      => ['required', 'min:2', new SpamFree],
+            'body'       => ['required', 'min:2', new SpamFree],
         ]);
-
-        $spam->detect(request('body'));
 
         $thread = Auth::user()->publishThread([
             'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body'),
+            'title'      => request('title'),
+            'body'       => request('body'),
         ]);
 
-        return redirect(route('threads.show',[$thread->channel->slug, $thread->id]))
+        return redirect(route('threads.show', [$thread->channel->slug, $thread->id]))
             ->with('flash', 'Thread successfully published.');
     }
 
@@ -88,7 +85,8 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Thread  $thread
+     * @param \App\Models\Thread $thread
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Thread $thread)
@@ -99,8 +97,9 @@ class ThreadsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Thread  $thread
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Thread $thread
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)

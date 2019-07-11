@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,17 +43,14 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread)
     {
+        request()->validate([
+            'body' => ['required', 'min:2', new Spamfree],
+        ]);
 
-        try {
-            $this->validateReply(request('body'));
-
-            $reply = $thread->addReply([
-                'user_id' => Auth::user()->id,
-                'body'    => request('body'),
-            ]);
-        } catch (\Exception $e) {
-            return response(['message' => 'Sorry, your message cant be saved at this time.'], 422);
-        }
+        $reply = $thread->addReply([
+            'user_id' => Auth::user()->id,
+            'body'    => request('body'),
+        ]);
 
         return response($reply->load('owner'), 200);
     }
@@ -96,7 +93,10 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         try {
-            $this->validateReply(request('body'));
+            request()->validate([
+                'body' => ['required', 'min:2', new Spamfree],
+            ]);
+
             $reply->update(request(['body']));
         } catch (\Exception $e) {
             return response(['message' => 'Sorry, your message cant be saved at this time.'], 422);
@@ -124,20 +124,5 @@ class RepliesController extends Controller
         }
 
         return back()->with('flash', 'Reply deleted.');
-    }
-
-
-    /**
-     * Validate the reply.
-     *
-     * @param $body
-     */
-    public function validateReply($body)
-    {
-        request()->validate([
-            'body' => ['required', 'min:2'],
-        ]);
-
-        resolve(Spam::class)->detect($body);
     }
 }

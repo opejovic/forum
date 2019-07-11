@@ -1974,8 +1974,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['endpoint'],
+  props: ["endpoint"],
   data: function data() {
     return {
       body: null,
@@ -1989,15 +1998,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(this.endpoint, {
         body: this.body
       }).then(function (response) {
-        _this.body = '';
+        _this.body = "";
         _this.errors = false;
 
-        _this.$emit('created', response.data);
+        _this.$emit("created", response.data);
 
-        flash('Replied successfuly!');
+        flash("Replied successfuly!");
       })["catch"](function (errors) {
-        _this.errors = errors.response.data.message;
-        flash('Your message contains spam.', 'danger');
+        _this.errors = errors.response.data.errors;
+        console.log(_this.errors); // flash("Your message contains spam.", "danger");
       });
     },
     clear: function clear() {
@@ -38491,7 +38500,7 @@ var render = function() {
                 expression: "body"
               }
             ],
-            class: _vm.errors ? "form-control is-invalid" : "form-control",
+            class: _vm.errors.body ? "form-control is-invalid" : "form-control",
             attrs: {
               id: "body",
               name: "body",
@@ -38516,7 +38525,7 @@ var render = function() {
                 { staticClass: "invalid-feedback", attrs: { role: "alert" } },
                 [
                   _c("strong", {
-                    domProps: { textContent: _vm._s(_vm.errors) }
+                    domProps: { textContent: _vm._s(_vm.errors.body[0]) }
                   })
                 ]
               )
@@ -38529,15 +38538,15 @@ var render = function() {
               attrs: { type: "submit" },
               on: { click: _vm.addReply }
             },
-            [_vm._v("Post")]
+            [_vm._v("\n            Post\n        ")]
           )
         ])
       : _c("p", { staticClass: "text-center" }, [
-          _vm._v("Please "),
+          _vm._v("\n        Please "),
           _c("a", { attrs: { href: "/login" } }, [_vm._v("sign in")]),
-          _vm._v(" or "),
+          _vm._v(" or\n        "),
           _c("a", { attrs: { href: "/register" } }, [_vm._v("register")]),
-          _vm._v(" in order to participate in this discussion.")
+          _vm._v(" in order to participate in this\n        discussion.\n    ")
         ])
   ])
 }
