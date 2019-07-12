@@ -63,4 +63,22 @@ class NotificationsTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->unreadNotifications);
     }
+    
+    /** @test */
+    function users_are_notified_when_they_are_mentioned()
+    {
+        // Arrange: 2 users, Jack and Julie
+        $this->withoutExceptionHandling();
+        $thread = factory(Thread::class)->create();
+        $jack = factory(User::class)->create(['name' => 'Jack']);
+        $julie = factory(User::class)->create(['name' => 'Julie']);
+
+        // Act: jack mentions julie
+        $this->actingAs($jack)->json('POST', "{$thread->path()}/replies", [
+            'body' => 'Hey @Julie, I have mentioned you.',
+        ]);
+
+        // Assert: julie has one notification
+        $this->assertCount(1, $julie->fresh()->notifications);
+    }
 }

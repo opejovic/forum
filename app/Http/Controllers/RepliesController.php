@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
+use App\Notifications\YouHaveBeenMentioned;
 use App\Rules\OncePerMinuteOnly;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
@@ -47,10 +49,22 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread, CreatePostRequest $request)
     {
-        return $thread->addReply([
+        $reply = $thread->addReply([
             'user_id' => Auth::user()->id,
             'body'    => request('body'),
-        ])->load('owner');
+        ]);
+
+        // Want to fetch all users from the body if there are any users mentioned
+        // And notify them about it.
+        preg_match_all('/\@([^\s\.\,]+)/', $reply->body, $matches);
+
+        foreach ($matches[1] as $name) {
+            User::whereName($name)
+                ->firstOrFail()
+                ->notify(new YouHaveBeenMentioned($reply));
+        }
+
+        return $reply->load('owner');
     }
 
     /**
