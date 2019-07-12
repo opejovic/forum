@@ -68,7 +68,6 @@ class NotificationsTest extends TestCase
     function users_are_notified_when_they_are_mentioned()
     {
         // Arrange: 2 users, Jack and Julie
-        $this->withoutExceptionHandling();
         $thread = factory(Thread::class)->create();
         $jack = factory(User::class)->create(['name' => 'Jack']);
         $julie = factory(User::class)->create(['name' => 'Julie']);

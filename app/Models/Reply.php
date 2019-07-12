@@ -16,10 +16,9 @@ class Reply extends Model
     protected $appends = ['favoritesCount', 'isFavorited', 'canUpdate'];
 
     /**
-     * summary
+     * Models boot method.
      *
      * @return void
-     * @author 
      */
     protected static function boot()
     {
@@ -73,9 +72,7 @@ class Reply extends Model
     {
         preg_match_all('/\@([^\s\.\,]+)/', $this->body, $names);
 
-        return collect($names[1])->map(function ($name) {
-            return User::whereName($name)->first();
-        })->filter();
+		return User::whereIn('name', $names[1])->get();
     }
 
     /**
