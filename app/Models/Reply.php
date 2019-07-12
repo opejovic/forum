@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\YouHaveBeenMentioned;
 use App\Traits\Favorable;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +62,20 @@ class Reply extends Model
     public function wasJustPublished()
     {
         return $this->created_at->gt(now()->subMinute());
+    }
+
+    /**
+     * Return all of the mentioned users from the reply body.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([^\s\.\,]+)/', $this->body, $names);
+
+        return collect($names[1])->map(function ($name) {
+            return User::whereName($name)->first();
+        })->filter();
     }
 
     /**

@@ -10,35 +10,43 @@ use Tests\TestCase;
 
 class ReplyTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function it_has_an_owner()
-	{
-	    $owner = factory(User::class)->create();
-	    $reply = factory(Reply::class)->create(['user_id' => $owner->id]);
+    /** @test */
+    function it_has_an_owner()
+    {
+        $owner = factory(User::class)->create();
+        $reply = factory(Reply::class)->create(['user_id' => $owner->id]);
 
-	    $this->assertTrue($reply->owner->is($owner));
-	}
+        $this->assertTrue($reply->owner->is($owner));
+    }
 
-	/** @test */
-	function it_can_tell_if_its_been_favorited_by_auth_user()
-	{
-		auth()->login($user = factory(User::class)->create());
-	    $reply = factory(Reply::class)->create();
-	    $reply->favorite();
+    /** @test */
+    function it_can_tell_if_its_been_favorited_by_auth_user()
+    {
+        auth()->login($user = factory(User::class)->create());
+        $reply = factory(Reply::class)->create();
+        $reply->favorite();
 
-	    $this->assertTrue($reply->isFavorited());
-	}
+        $this->assertTrue($reply->isFavorited());
+    }
 
-	/** @test */
-	function it_can_tell_if_it_was_just_published()
-	{
+    /** @test */
+    function it_can_tell_if_it_was_just_published()
+    {
         $reply = factory(Reply::class)->create();
 
         $this->assertTrue($reply->wasJustPublished());
 
         $reply->created_at = now()->subMonth();
         $this->assertFalse($reply->wasJustPublished());
-	}
+    }
+
+    /** @test */
+    function it_can_get_mentioned_users_from_its_body()
+    {
+        $john = factory(User::class)->create(['name' => 'JohnDoe']);
+        $reply = factory(Reply::class)->create(['body' => '@JohnDoe is mentioned in this reply.']);
+        $this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());
+    }
 }

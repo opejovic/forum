@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
@@ -91,9 +92,9 @@ class Thread extends Model
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
-        
-        $this->notifySubscribers($reply);
-        
+
+        event(new ThreadReceivedNewReply($reply));
+
         return $reply;
     }
 

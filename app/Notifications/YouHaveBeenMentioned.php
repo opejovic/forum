@@ -2,14 +2,12 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class YouHaveBeenMentioned extends Notification
 {
-    protected $reply;
+    public $reply;
 
     /**
      * Create a new notification instance.
@@ -59,4 +57,5 @@ class YouHaveBeenMentioned extends Notification
             'path' => "{$this->reply->thread->path()}#reply-{$this->reply->id}",
         ];
     }
+
 }
