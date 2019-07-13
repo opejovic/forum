@@ -46,7 +46,17 @@ class ReplyTest extends TestCase
     function it_can_get_mentioned_users_from_its_body()
     {
         $john = factory(User::class)->create(['name' => 'JohnDoe']);
-        $reply = factory(Reply::class)->create(['body' => '@JohnDoe is mentioned in this reply.']);
-        $this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());
-    }
+		$reply = factory(Reply::class)->create(['body' => '@JohnDoe is mentioned in this reply.']);
+		$this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());
+	}
+	
+	/** @test */
+	function it_wraps_mentioned_user_name_in_anchor_tags()
+	{
+		$john = factory(User::class)->create(['name' => 'JohnDoe']);
+		$reply = factory(Reply::class)->create(['body' => 'Hello @JohnDoe.']);
+		
+		$this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());
+		$this->assertEquals('Hello <a href="/profiles/JohnDoe">@JohnDoe</a>.' ,$reply->body);
+	}
 }

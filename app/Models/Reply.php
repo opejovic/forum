@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Notifications\YouHaveBeenMentioned;
 use App\Traits\Favorable;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,7 @@ class Reply extends Model
 {
     use Favorable, RecordsActivity;
 
-	protected $guarded = [];
+    protected $guarded = [];
     protected $with = ['owner', 'favorites'];
     protected $appends = ['favoritesCount', 'isFavorited', 'canUpdate'];
 
@@ -38,9 +37,9 @@ class Reply extends Model
      *
      * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function owner() 
+    public function owner()
     {
-    	return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -48,7 +47,7 @@ class Reply extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function thread() 
+    public function thread()
     {
         return $this->belongsTo(Thread::class);
     }
@@ -70,8 +69,8 @@ class Reply extends Model
      */
     public function mentionedUsers()
     {
-        preg_match_all('/\@([^\s\.\,]+)/', $this->body, $names);
-
+		preg_match_all('/@([\w\-]+)/', $this->body, $names);
+		
 		return User::whereIn('name', $names[1])->get();
     }
 
@@ -87,5 +86,16 @@ class Reply extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Wrap mentioned user names withing an anchor tag.
+     *
+     * @param  string  $body
+     * @return void
+     */
+    public function setBodyAttribute($body)
+    {
+		$this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
     }
 }

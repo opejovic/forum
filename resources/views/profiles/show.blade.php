@@ -6,11 +6,11 @@
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center">
                 <span class="display-4">
-                    Hey, {{ $profileUser->name }}.
+                    {{ $profileUser->name }}
                 </span>
 
                 <span>
-                    Since {{ $profileUser->created_at->diffForHumans() }}.
+                    Member since {{ $profileUser->created_at->diffForHumans() }}.
                 </span>
             </div>
             <hr>

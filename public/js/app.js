@@ -2207,13 +2207,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['data'],
+  props: ["data"],
   components: {
     Favorite: _Favorite_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -2243,13 +2239,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.editing = false;
         flash(response.data.message);
       })["catch"](function (error) {
-        flash(error.response.data.message, 'danger');
+        flash(error.response.data.message, "danger");
       });
     },
     deleteReply: function deleteReply() {
       axios["delete"]("/replies/".concat(this.data.id));
-      this.$emit('deleted', this.data.id);
-      flash('Reply deleted!');
+      this.$emit("deleted", this.data.id);
+      flash("Reply deleted!");
     },
     clearEdit: function clearEdit() {
       this.editing = false;
@@ -38724,7 +38720,7 @@ var render = function() {
             attrs: { href: "/profiles/" + _vm.reply.owner.name },
             domProps: { textContent: _vm._s(_vm.reply.owner.name) }
           }),
-          _vm._v(" \n\t\t\tsaid " + _vm._s(_vm.reply.created_at) + "\n\t\t")
+          _vm._v("\n\t\t\tsaid " + _vm._s(_vm.reply.created_at) + "\n\t\t")
         ]),
         _vm._v(" "),
         _vm.signedIn
@@ -38778,7 +38774,7 @@ var render = function() {
               [_vm._v("Cancel")]
             )
           ])
-        : _c("div", { domProps: { textContent: _vm._s(_vm.body) } })
+        : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
     ]),
     _vm._v(" "),
     _vm.canUpdate
