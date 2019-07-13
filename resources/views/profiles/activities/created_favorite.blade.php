@@ -12,6 +12,6 @@
 	@endslot
 
 	@slot('body')
-		{{ $activity->subject->favorable->body }}
+		{!! $activity->subject->favorable->body !!}
 	@endslot
 @endcomponent

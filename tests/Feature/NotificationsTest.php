@@ -79,5 +79,22 @@ class NotificationsTest extends TestCase
 
         // Assert: julie has one notification
         $this->assertCount(1, $julie->fresh()->notifications);
-    }
+	}
+	
+	/** @test */
+	function it_can_fetch_all_mentioned_users_starting_with_the_given_characters()
+	{
+		// Arrange: 3 users 
+		$john = factory(User::class)->create(['name' => 'johndoe']);
+		$john2 = factory(User::class)->create(['name' => 'johndoe2']);
+		$jane = factory(User::class)->create(['name' => 'janedoe']);
+		
+		// Act: submit query to endpoint
+		$result = $this->json('GET', "/api/users", ['name' => 'john']);
+
+		// Assert: correct result is returned
+		$this->assertContains($john->name, $result->json());
+		$this->assertContains($john2->name, $result->json());
+		$this->assertNotContains($jane->name, $result->json());
+	}
 }

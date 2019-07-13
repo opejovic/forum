@@ -43,3 +43,5 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::delete('/threads/{channelId}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')
 		->name('thread.unsubscribe');
 });
+
+Route::get('/api/users', 'Api\UsersController@index');
