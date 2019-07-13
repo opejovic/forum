@@ -3520,7 +3520,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return ['btn', this.isActive ? 'btn-primary' : 'btn-outline-secondary'];
+      return ['btn', 'btn-sm', this.isActive ? 'btn-primary' : 'btn-outline-secondary'];
     },
     subscribed: function subscribed() {
       return this.isActive ? 'Subscribed' : 'Subscribe';

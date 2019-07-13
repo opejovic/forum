@@ -15,7 +15,7 @@
 
 		computed: {
 			classes() {
-				return ['btn', this.isActive ? 'btn-primary' : 'btn-outline-secondary'];
+				return ['btn', 'btn-sm', this.isActive ? 'btn-primary' : 'btn-outline-secondary'];
 			},
 
 			subscribed() {
