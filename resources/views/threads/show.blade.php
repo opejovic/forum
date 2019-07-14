@@ -12,8 +12,15 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between">
                         <div>
-                            <h4>{{ $thread->title }}</h4>
-                            <a href="{{ route('profiles.show', $thread->creator) }}">{{ $thread->creator->name }}</a>
+							<h4>{{ $thread->title }}</h4>
+							<div class="d-flex align-items-center">
+								<img class="mr-1" src="{{ asset("storage/" . $thread->creator->avatar) }}" alt="avatar" width="25px">
+								
+								<div><a href="{{ route('profiles.show', $thread->creator) }}">
+										{{ $thread->creator->name }}
+								</a></div>
+
+							</div>
                         </div>
 
                         <div>

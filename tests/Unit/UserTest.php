@@ -54,4 +54,17 @@ class UserTest extends TestCase
 
         $this->assertEquals($reply->id, $user->lastReply->id);
 	}
+
+	/** @test */
+	function it_can_tell_its_avatar_path()
+	{
+		$user = factory(User::class)->create(['avatar_path' => null]);
+
+		$this->assertEquals("avatars/default.png", $user->avatar());
+
+		$user->avatar_path = "/avatars/me.jpg";
+
+		$this->assertEquals("/avatars/me.jpg", $user->avatar());
+
+	}
 }

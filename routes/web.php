@@ -45,3 +45,4 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('/api/users', 'Api\UsersController@index');
+Route::middleware('auth')->post('/api/users/{user}/avatar', 'Api\UserAvatarsController@store')->name('avatar.store');
