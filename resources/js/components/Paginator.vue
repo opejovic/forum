@@ -5,7 +5,7 @@
 				<li :class="prevUrl ? 'page-item' : 'page-item disabled'">
 					<a class="page-link" href="#" rel="prev" @click="previousPage">Previous</a>
 				</li>
-				<li v-for="item in pages" class="page-item">
+				<li v-for="item in pages" :key="item" class="page-item">
 					<a :class="item == page ? 'page-link selected' : 'page-link'" href="#" v-text="item" @click="select(item)"></a>
 				</li>
 				<li :class="nextUrl ? 'page-item' : 'page-item disabled'">

@@ -60,11 +60,11 @@ class UserTest extends TestCase
 	{
 		$user = factory(User::class)->create(['avatar_path' => null]);
 
-		$this->assertEquals("avatars/default.png", $user->avatar());
+		$this->assertEquals("http://localhost/storage/avatars/default.png", $user->avatarPath);
 
-		$user->avatar_path = "/avatars/me.jpg";
+		$otherUser = factory(User::class)->create(['avatar_path' => 'avatars/me.jpg']);
 
-		$this->assertEquals("/avatars/me.jpg", $user->avatar());
+		$this->assertEquals("http://localhost/storage/avatars/me.jpg", $otherUser->avatar_path);
 
 	}
 }

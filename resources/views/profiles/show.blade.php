@@ -6,24 +6,7 @@
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-					<div class="display-4 d-flex align-items-center">
-						<img class="mr-2" src="{{ asset("storage/$profileUser->avatar") }}" alt="avatar" width="60px">
-						
-						<div>
-							{{ $profileUser->name }}
-						</div>
-					</div>
-					
-					@can('update', $profileUser)
-						<div>
-							<form action="{{ route('avatar.store', $profileUser) }}" method="POST" enctype="multipart/form-data">
-								@csrf
-								<input type="file" name="avatar">
-
-								<button type="submit">Upload</button>
-							</form>
-						</div>
-					@endcan
+					<avatar-form :profileuser="{{ $profileUser }}"></avatar-form>
                 </div>
 
                 <span>

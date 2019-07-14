@@ -14,7 +14,7 @@
                         <div>
 							<h4>{{ $thread->title }}</h4>
 							<div class="d-flex align-items-center">
-								<img class="mr-1" src="{{ asset("storage/" . $thread->creator->avatar) }}" alt="avatar" width="25px">
+								<img class="mr-1" src="{{ $thread->creator->avatar_path }}" alt="avatar" width="25px">
 								
 								<div><a href="{{ route('profiles.show', $thread->creator) }}">
 										{{ $thread->creator->name }}

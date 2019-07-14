@@ -32,6 +32,7 @@ class UploadAvatarTest extends TestCase
 	/** @test */
 	function an_authenticated_user_may_add_an_avatar_to_their_profile()
 	{
+		$this->withoutExceptionHandling();
 		Storage::fake();
 
 		$user = factory(User::class)->create();
@@ -40,7 +41,7 @@ class UploadAvatarTest extends TestCase
 			'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'),
 		]);
 		
-		$this->assertEquals("avatars/{$file->hashName()}", $user->avatar_path);
+		$this->assertEquals("http://localhost/storage/avatars/{$file->hashName()}", $user->avatar_path);
 		Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
 	}
 }

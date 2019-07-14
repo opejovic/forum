@@ -45,7 +45,7 @@ class ReplyTest extends TestCase
     /** @test */
     function it_can_get_mentioned_users_from_its_body()
     {
-        $john = factory(User::class)->create(['name' => 'JohnDoe']);
+        $john = factory(User::class)->create(['name' => 'JohnDoe', 'avatar_path' => null]);
 		$reply = factory(Reply::class)->create(['body' => '@JohnDoe is mentioned in this reply.']);
 		$this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());
 	}
@@ -53,7 +53,7 @@ class ReplyTest extends TestCase
 	/** @test */
 	function it_wraps_mentioned_user_name_in_anchor_tags()
 	{
-		$john = factory(User::class)->create(['name' => 'JohnDoe']);
+		$john = factory(User::class)->create(['name' => 'JohnDoe', 'avatar_path' => null]);
 		$reply = factory(Reply::class)->create(['body' => 'Hello @JohnDoe.']);
 		
 		$this->assertContains($john->toArray(), $reply->mentionedUsers()->toArray());

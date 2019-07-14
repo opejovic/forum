@@ -12,7 +12,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script>
-        window.authenticated = {!! json_encode(Auth::check(), JSON_HEX_TAG) !!}
+        window.authenticated = {!! json_encode(Auth::check(), JSON_HEX_TAG) !!};
+        window.user = {!! json_encode(Auth::user(), JSON_HEX_TAG) !!};
     </script>
 
     <!-- Fonts -->
