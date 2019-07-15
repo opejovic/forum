@@ -117,5 +117,20 @@ class ReadThreadsTest extends TestCase
             $replies->fresh()->toArray(), 
             $response->json()['data']
         );
-    }
+	}
+
+	/** @test */
+	function we_record_new_visit_each_time_a_thread_is_read()
+	{
+		$this->withoutExceptionHandling();
+		$thread = factory(Thread::class)->create(['visits' => 0]);
+		$this->assertEquals(0, $thread->visits);
+
+		// Act: visit the threads index page
+		$this->get($thread->path());
+		
+		// Assert: see the threadone view count of 1 and thread two view count of 0
+		$this->assertEquals(1, $thread->fresh()->visits);
+	}
+
 }
