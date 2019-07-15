@@ -134,10 +134,10 @@ class ThreadTest extends TestCase
 	function it_records_a_score_whenever_its_visited()
 	{
 		$thread = factory(Thread::class)->create();
-		$thread->resetVisits();
-		$this->assertEquals(0, $thread->visits());
+		$thread->visits()->reset();
+		$this->assertEquals(0, $thread->visits()->count());
 
-		$thread->recordVisit();
-		$this->assertEquals(1, $thread->visits());
+		$thread->visits()->record();
+		$this->assertEquals(1, $thread->visits()->count());
 	}
 }

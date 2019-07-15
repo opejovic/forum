@@ -12,8 +12,8 @@
             <div class="col-md-4">
 				@if (count($trendingThreads))
 					<div class="card">
-						<div class="card-header">
-							Treding threads:
+						<div class="card-header text-center">
+							Trending threads
 						</div>
 
 						<div class="card-body">

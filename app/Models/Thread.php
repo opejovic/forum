@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Utilities\Visits;
+use App\Traits\RecordsVisits;
 use App\Filters\ThreadFilters;
 use App\Traits\RecordsActivity;
-use App\Traits\RecordsVisits;
 use Illuminate\Support\Facades\Redis;
 use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordsActivity, RecordsVisits;
+    use RecordsActivity;
     
     /**
     * Attributes that are not mass-assignable.
@@ -192,5 +193,16 @@ class Thread extends Model
         $user = $user ?: auth()->user();
 
         return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+	}
+
+
+	/**
+	 * Get the thread visit details. Count the visits or reset the cache count.
+	 * 
+	 * @return \App\Utilities\Visits
+	 */
+	public function visits()
+	{
+		return new Visits($this);
 	}
 }
