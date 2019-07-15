@@ -1,7 +1,7 @@
 @forelse($threads as $thread)
 	<div class="card mb-3">
 		<div class="card-header d-flex justify-content-between align-items-center">
-			<div>
+		<div>
 				<a href="{{ $thread->path() }}">
 					@if(auth()->check() && $thread->hasUpdatesFor(auth()->user()))
 						<h4><strong>{{ $thread->title }}</strong></h4>
@@ -26,6 +26,10 @@
 
 		<div class="card-body">
 			{{ $thread->body }}
+		</div>
+
+		<div class="card-footer">
+			{{ $thread->visits() }} Visits
 		</div>
 	</div>
 

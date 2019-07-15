@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
-use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
+use App\Traits\RecordsVisits;
+use Illuminate\Support\Facades\Redis;
+use App\Events\ThreadReceivedNewReply;
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, RecordsVisits;
     
     /**
     * Attributes that are not mass-assignable.
@@ -176,6 +178,8 @@ class Thread extends Model
     }
 
     /**
+	 * Does the thread have updates for the user?
+	 * 
      * @param $user
      *
      * @return bool
@@ -188,5 +192,5 @@ class Thread extends Model
         $user = $user ?: auth()->user();
 
         return $this->updated_at > cache($user->visitedThreadCacheKey($this));
-    }
+	}
 }
