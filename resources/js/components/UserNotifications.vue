@@ -6,7 +6,8 @@
 
 		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 			<a class="dropdown-item" :href="notification.data.path" 
-			v-for="notification in notifications" 
+			v-for="notification in notifications"
+			:key="notification.id" 
 			v-text="notification.data.message"
 			@click="markAsRead(notification)">
 			</a>
