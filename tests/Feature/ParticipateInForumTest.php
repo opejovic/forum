@@ -166,5 +166,14 @@ class ParticipateInForumTest extends TestCase
         ])->assertStatus(422);
 
         $this->assertCount(1, $user->fresh()->replies);
-    }
+	}
+	
+	/** @test */
+	function authenticated_users_cannot_participate_in_forum_unless_their_email_is_confirmed()
+	{
+		$this->withoutExceptionHandling();
+		$user = factory(User::class)->create(['email_verified_at' => null]);
+	
+		$this->actingAs($user)->get(route('threads.create'))->assertRedirect('email/verify'); // unauthorized
+	}
 }

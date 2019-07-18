@@ -35,6 +35,8 @@ class ThreadsController extends Controller
 	 */
 	public function create()
 	{
+		// abort_if(Auth::user()->email_verified_at == null, 401, 'You have to verify your email first.');
+
 		return view('threads.create');
 	}
 
