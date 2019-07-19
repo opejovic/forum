@@ -17,14 +17,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/threads', 'ThreadsController@index')->name('threads.index');
 Route::get('/threads/create', 'ThreadsController@create')->name('threads.create')->middleware(['auth', 'verified']);
 Route::get('/threads/{channel}', 'ThreadsController@index')->name('channel.threads');
-Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware('auth');
+Route::post('/threads', 'ThreadsController@store')->name('threads.store')->middleware(['auth', 'verified']);
 Route::get('/threads/{channelId}/{thread}', 'ThreadsController@show')->name('threads.show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy')->name('threads.delete')->middleware('auth');
 
 Route::get('/threads/{channelId}/{thread}/replies', 'RepliesController@index')->name('replies.index');
-Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware('auth');
+Route::post('/threads/{channelId}/{thread}/replies', 'RepliesController@store')->name('replies.store')->middleware(['auth', 'verified']);
 
-Route::group(['prefix' => 'replies', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'replies', 'middleware' => 'auth', 'verified'], function () {
 	Route::patch('{reply}', 'RepliesController@update')->name('replies.update');
 	Route::delete('{reply}', 'RepliesController@destroy')->name('replies.delete');
 
