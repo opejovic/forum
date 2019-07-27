@@ -29,7 +29,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->slug}/replies", [
                 'body' => 'More Cowbell, please.',
             ])->assertStatus(201);
 
@@ -45,7 +45,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->slug}/replies", [
                 'body' => null,
             ])->assertJsonValidationErrors('body');
     }
@@ -58,7 +58,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->actingAs($user)
             ->from($thread->path())
-            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->id}/replies", [
+            ->json('POST', "/threads/{$thread->channel->slug}/{$thread->slug}/replies", [
                 'body' => 'A',
             ])->assertJsonValidationErrors('body');
     }
@@ -142,7 +142,7 @@ class ParticipateInForumTest extends TestCase
         $user = factory(User::class)->create();
         $thread = factory(Thread::class)->create();
 
-        $this->actingAs($user)->json('POST', "threads/{$thread->channel->slug}/{$thread->id}/replies", [
+        $this->actingAs($user)->json('POST', "threads/{$thread->channel->slug}/{$thread->slug}/replies", [
             'body' => 'Yahoo Customer Support'
         ])->assertJsonValidationErrors('body');
 

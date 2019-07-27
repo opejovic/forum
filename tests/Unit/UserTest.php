@@ -21,7 +21,8 @@ class UserTest extends TestCase
 
 	    $user->publishThread([
 	    	'channel_id' => 1,
-	    	'title' => 'Samurai',
+			'title' => 'Samurai',
+			'slug' => str_slug('Samurai'),
 	    	'body' => 'Samurais are japanse warriors. They follow bushido.',
 	    ]);
 

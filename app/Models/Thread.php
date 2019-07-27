@@ -41,13 +41,22 @@ class Thread extends Model
 	}
 
 	/**
+	 * Route key name for the model.
+	 *
+	 */
+	public function getRouteKeyName()
+	{
+		return 'slug';
+	}
+	
+	/**
 	 * Returns a string representation of a threads path.
 	 *
 	 * @return string
 	 */
 	public function path()
 	{
-		return "/threads/{$this->channel->slug}/{$this->id}";
+		return "/threads/{$this->channel->slug}/{$this->slug}";
 	}
 
 	/**

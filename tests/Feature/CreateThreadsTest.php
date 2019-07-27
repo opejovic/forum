@@ -53,7 +53,7 @@ class CreateThreadsTest extends TestCase
         $otherUser = factory(User::class)->create();
         $this->assertCount(1, $john->fresh()->threads);
 
-        $response = $this->actingAs($otherUser)->json('DELETE', "/threads/{$johnsThread->channel->slug}/{$johnsThread->id}");
+        $response = $this->actingAs($otherUser)->json('DELETE', "/threads/{$johnsThread->channel->slug}/{$johnsThread->slug}");
 
         $response->assertStatus(403);
         $this->assertCount(1, $john->fresh()->threads);
@@ -74,7 +74,7 @@ class CreateThreadsTest extends TestCase
         $response = $this->actingAs($user)
             ->json(
                 'DELETE',
-                "/threads/{$thread->channel->slug}/{$thread->id}"
+                "/threads/{$thread->channel->slug}/{$thread->slug}"
             );
 
         $response->assertStatus(200);
@@ -92,7 +92,7 @@ class CreateThreadsTest extends TestCase
         $this->assertCount(1, $user->fresh()->threads);
         $this->assertCount(2, $thread->replies);
 
-        $response = $this->actingAs($user)->json('DELETE', "/threads/{$thread->channel->slug}/{$thread->id}");
+        $response = $this->actingAs($user)->json('DELETE', "{$thread->path()}");
 
         $response->assertStatus(200);
         $this->assertCount(0, $user->fresh()->threads);

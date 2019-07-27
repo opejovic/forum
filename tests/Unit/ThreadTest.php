@@ -64,7 +64,7 @@ class ThreadTest extends TestCase
 	{
 		$thread = factory(Thread::class)->create();
 
-		$this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+		$this->assertEquals("/threads/{$thread->channel->slug}/{$thread->slug}", $thread->path());
 	}
 
 	/** @test */

@@ -33,7 +33,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     function user_can_view_a_single_thread()
     {
-        $response = $this->get("/threads/{$this->thread->channel->slug}/{$this->thread->id}");
+        $response = $this->get("{$this->thread->path()}");
 
         $response->assertViewIs('threads.show');
         $response->assertSee($this->thread->title);
@@ -110,7 +110,7 @@ class ReadThreadsTest extends TestCase
         $thread = factory(Thread::class)->create();
         $replies = factory(Reply::class, 2)->create(['thread_id' => $thread->id]);
 
-        $response = $this->json('GET', "/threads/{$thread->channel->slug}/{$thread->id}/replies");
+        $response = $this->json('GET', "/threads/{$thread->channel->slug}/{$thread->slug}/replies");
 
         $response->assertStatus(200);
         $this->assertArraySubset(
